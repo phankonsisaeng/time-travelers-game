@@ -1,0 +1,3123 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Travelers: ซ่อมนาฬิกามิติ พิชิตอนาคต</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Anuphan', 'Prompt', 'sans-serif'],
+            orbitron: ['Orbitron', 'sans-serif'],
+          },
+          boxShadow: {
+            'neon-blue': '0 0 15px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.2)',
+            'neon-purple': '0 0 15px rgba(168, 85, 247, 0.5), 0 0 30px rgba(168, 85, 247, 0.2)',
+            'neon-gold': '0 0 15px rgba(245, 158, 11, 0.5), 0 0 30px rgba(245, 158, 11, 0.2)',
+            'card-dark': '0 10px 30px -5px rgba(0, 0, 0, 0.4), 0 20px 40px -10px rgba(0, 0, 0, 0.3)',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=Orbitron:wght@700;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Animate.css for smooth animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.6);
+    }
+
+    /* Dynamic Backgrounds */
+    .bg-main {
+      background-image: url('background.png');
+    }
+    .bg-stage-1 { background-image: url('stage background 1.png'); }
+    .bg-stage-2 { background-image: url('stage background 2.png'); }
+    .bg-stage-3 { background-image: url('stage background 3.png'); }
+    .bg-stage-4 { background-image: url('stage background 4.png'); }
+    .bg-stage-5 { background-image: url('stage background 5.png'); }
+
+    .game-bg-active {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      transition: background-image 0.8s ease-in-out;
+    }
+
+    /* Glassmorphism */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Glowing Text */
+    .text-glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+    .text-glow-purple { text-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
+    .text-glow-gold { text-shadow: 0 0 10px rgba(245, 158, 11, 0.6); }
+
+    /* Pulse Glow */
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+      50% { transform: scale(1.02); opacity: 1; box-shadow: 0 0 35px rgba(168, 85, 247, 0.4); }
+    }
+    .clock-pulse {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+
+    #matching-canvas {
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+    }
+
+    /* Custom styling for the volume range slider track and circle thumb */
+    #bgm-volume {
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      width: 80px !important;
+      background: transparent !important;
+      outline: none !important;
+    }
+
+    #bgm-volume::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+
+    #bgm-volume::-webkit-slider-thumb {
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+      margin-top: -5px; /* (4px - 14px) / 2 = -5px to center it */
+      transition: transform 0.1s;
+    }
+
+    #bgm-volume::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    #bgm-volume::-moz-range-track {
+      width: 100%;
+      height: 4px;
+      cursor: pointer;
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+
+    #bgm-volume::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border: none;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+      transition: transform 0.1s;
+    }
+
+    #bgm-volume::-moz-range-thumb:hover {
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+<body id="game-body" class="game-bg-active bg-main text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden font-sans relative select-none">
+
+  <!-- Background Overlay -->
+  <div id="bg-overlay" class="absolute inset-0 bg-slate-950/20 z-0 pointer-events-none transition-all duration-500"></div>
+
+  <!-- Floating BGM Controller (Bottom-Right Corner) -->
+  <div id="bgm-controller-container" class="fixed bottom-4 right-4 sm:right-6 sm:bottom-20 z-40 flex items-center bg-slate-950/95 border border-slate-800 rounded-2xl shadow-2xl p-1 transition-all duration-300">
+    <!-- Volume Slider Container (Starts collapsed with w-0) -->
+    <div id="bgm-slider-container" class="w-0 overflow-hidden transition-all duration-300 flex items-center">
+      <span id="bgm-volume-percent" class="text-[10px] font-mono font-bold text-blue-400 ml-2 min-w-[24px] text-right">10%</span>
+      <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.10" oninput="changeBgmVolume(this.value)" class="w-20 mx-2 cursor-pointer" title="ระดับเสียงเพลงประกอบ">
+    </div>
+    <!-- Speaker Button -->
+    <button onclick="toggleBgmVolumeSlider(event)" id="btn-bgm-toggle" class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-900 transition-all" title="ปรับเสียงเพลงประกอบ">
+      <i class="fa-solid fa-volume-high text-xs"></i>
+    </button>
+  </div>
+
+  <!-- Header -->
+  <header class="w-full py-4 px-6 bg-slate-950/80 backdrop-blur-md border-b border-blue-500/20 flex justify-between items-center z-10 relative">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 flex items-center justify-center bg-blue-950/50 rounded-xl border border-blue-500/30 clock-pulse">
+        <i class="fa-solid fa-clock text-blue-400 text-lg"></i>
+      </div>
+      <div>
+        <h1 class="font-bold text-base md:text-lg tracking-tight text-white font-orbitron">
+          TIME TRAVELERS
+        </h1>
+        <p class="text-[11px] text-blue-300 font-medium">ซ่อมนาฬิกามิติ พิชิตอนาคต • ป.5 วิทยาการคำนวณ</p>
+      </div>
+    </div>
+
+    <!-- Top Stats -->
+    <div id="top-stats" class="hidden flex items-center space-x-3">
+      <!-- Leaderboard Trigger Button -->
+      <button onclick="openLeaderboardModal()" class="flex items-center space-x-1.5 bg-slate-900/60 hover:bg-slate-800 border border-slate-800/80 text-amber-400 px-3 py-1.5 rounded-xl transition-all active:scale-95" title="อันดับผู้เล่น">
+        <i class="fa-solid fa-trophy text-xs"></i>
+        <span class="hidden sm:inline text-[11px] font-bold text-slate-300">อันดับ</span>
+      </button>
+
+      <div class="flex items-center space-x-2 bg-slate-900/60 px-3 py-1.5 rounded-xl border border-slate-800/80">
+        <i class="fa-solid fa-user text-slate-400 text-xs"></i>
+        <span id="display-name" class="text-xs font-semibold text-slate-300 truncate max-w-[100px]">Time Traveler</span>
+      </div>
+      
+      <div class="flex items-center space-x-2 bg-blue-950/40 px-3 py-1.5 rounded-xl border border-blue-500/30 text-blue-300 font-orbitron text-xs font-bold">
+        <i class="fa-solid fa-star text-amber-400"></i>
+        <span id="display-score">0</span>/15
+        <span class="text-slate-700">|</span>
+        <i class="fa-solid fa-coins text-yellow-400"></i>
+        <span id="display-points">0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow flex items-center justify-center p-4 md:p-6 z-10 relative w-full max-w-6xl mx-auto">
+    
+    <!-- ==================== 1. START SCREEN ==================== -->
+    <section id="screen-start" class="w-full max-w-lg bg-slate-900/85 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-card-dark border border-blue-500/30 text-center space-y-6 animate__animated animate__fadeIn self-end -mb-4 md:-mb-6">
+      <div class="space-y-3">
+        <div class="inline-block">
+          <span class="px-3.5 py-1.5 rounded-full bg-blue-950/50 text-blue-300 text-[10px] font-semibold tracking-wide border border-blue-500/30 shadow-neon-blue">
+            ภารกิจกู้เวลามิติ (Logical Thinking Game)
+          </span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight font-orbitron">
+          TIME TRAVELERS
+        </h1>
+        <h2 class="text-lg md:text-xl font-bold text-glow-purple text-purple-300">
+          ซ่อมนาฬิกามิติ พิชิตอนาคต
+        </h2>
+        <p class="text-slate-300 text-xs md:text-sm max-w-md mx-auto leading-relaxed">
+          ยินดีต้อนรับนักเดินทางข้ามเวลา! มิติต่างๆ กำลังปั่นป่วนและสับสนอลหม่าน มาร่วมมือกันแก้ปริศนาตรรกะ เพื่อเก็บสะสม "เฟืองมิติ" ทั้ง 15 ชิ้น และซ่อมแซมนาฬิกาแห่งจักรวาลให้กลับมาเดินได้ปกติกันเถอะ!
+        </p>
+      </div>
+
+      <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
+        <img src="logo_mian.png" alt="Time Travelers Logo" class="w-32 h-32 object-contain">
+      </div>
+
+      <div class="pt-1">
+        <button onclick="checkActiveSession()" class="group px-6 py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-2xl shadow-neon-blue transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-2 mx-auto">
+          <span>เริ่มต้นเดินทาง (Start Game)</span>
+          <i class="fa-solid fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== 2. REGISTRATION SCREEN ==================== -->
+    <section id="screen-register" class="hidden w-full max-w-md bg-slate-900/85 backdrop-blur-md p-8 rounded-3xl shadow-card-dark border border-blue-500/25 animate__animated animate__fadeIn">
+      <div class="text-center space-y-2 mb-8">
+        <div class="w-12 h-12 bg-blue-950/50 rounded-2xl flex items-center justify-center text-blue-400 mx-auto border border-blue-500/30">
+          <i class="fa-solid fa-id-card text-xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-white">ข้อมูลนักเดินทางข้ามเวลา</h2>
+        <p class="text-xs text-slate-400">กรอกข้อมูลของคุณเพื่อบันทึกลงในทะเบียนเวลากลาง</p>
+      </div>
+
+      <form id="register-form" onsubmit="handleRegistration(event)" class="space-y-6">
+        <div class="space-y-2">
+          <label for="student-name" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">ชื่อ - นามสกุล (Student Name)</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
+              <i class="fa-solid fa-user-astronaut text-sm"></i>
+            </div>
+            <input type="text" id="student-name" required placeholder="" 
+              class="w-full pl-11 pr-4 py-3.5 bg-slate-950/60 border border-slate-700 rounded-2xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 text-white placeholder-slate-600 font-medium transition-all">
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label for="student-class" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">ชั้นเรียน / เลขที่ (Class / No.)</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500">
+              <i class="fa-solid fa-graduation-cap text-sm"></i>
+            </div>
+            <input type="text" id="student-class" required placeholder="" 
+              class="w-full pl-11 pr-4 py-3.5 bg-slate-950/60 border border-slate-700 rounded-2xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 text-white placeholder-slate-600 font-medium transition-all">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-2xl shadow-neon-purple transition-all active:scale-95 flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-circle-check text-sm"></i>
+          <span>ยืนยันข้อมูล (Confirm)</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ==================== 3. RULES POP-UP ==================== -->
+    <section id="screen-rules" class="hidden w-full max-w-2xl bg-slate-900/85 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-card-dark border border-purple-500/25 animate__animated animate__fadeIn">
+      <div class="text-center space-y-2 mb-6">
+        <div class="w-12 h-12 bg-purple-950/50 rounded-2xl flex items-center justify-center text-purple-400 mx-auto border border-purple-500/30">
+          <i class="fa-solid fa-scroll text-xl"></i>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold text-white">คู่มือปฏิบัติการกู้เวลา</h2>
+        <p class="text-xs text-slate-400">โปรดอ่านวิธีเล่นสั้นๆ เพื่อเริ่มซ่อมแซมนาฬิกามิติ</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 text-sm text-slate-300">
+        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
+          <h3 class="font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-gamepad text-blue-400"></i>
+            <span>5 มิติเวลาสุดสนุก</span>
+          </h3>
+          <p class="text-xs leading-relaxed text-slate-400">เกมมีทั้งหมด 15 ข้อ (ด่านละ 3 ข้อ) โดยมีวิธีเล่นตอบคำถามที่ต่างกันออกไปในแต่ละด่าน</p>
+        </div>
+
+        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
+          <h3 class="font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-star text-amber-400"></i>
+            <span>ระบบสะสมดวงดาว</span>
+          </h3>
+          <p class="text-xs leading-relaxed text-slate-400">ตอบถูกครบ 3 ข้อในด่าน = ⭐⭐⭐<br>ตอบถูก 2 ข้อ = ⭐⭐☆, ตอบถูก 1 ข้อ = ⭐☆☆</p>
+        </div>
+
+        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
+          <h3 class="font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-lightbulb text-yellow-400"></i>
+            <span>การฝึกคิดอย่างเป็นระบบ</span>
+          </h3>
+          <p class="text-xs leading-relaxed text-slate-400">ช่วยให้นักเรียนฝึกหาคำตอบจากรูปแบบ ลำดับขั้นตอน การตัดสินใจเชิงตรรกะ และคาดเดาผลลัพธ์</p>
+        </div>
+
+        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
+          <h3 class="font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-cloud-arrow-up text-emerald-400"></i>
+            <span>บันทึกคะแนนจัดอันดับ</span>
+          </h3>
+          <p class="text-xs leading-relaxed text-slate-400">คะแนนและดวงดาวที่คุณสะสมได้จะถูกนำไปบันทึกขึ้นระบบ Google Sheets เพื่อจัดอันดับผู้พิทักษ์เวลา</p>
+        </div>
+      </div>
+
+      <button onclick="showStageTransition(1)" class="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-lg rounded-2xl shadow-neon-blue transition-all flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-rocket text-sm"></i>
+        <span>เข้าสู่มิติเวลา (Launch Game)</span>
+      </button>
+    </section>
+
+    <!-- ==================== 4. STAGE TRANSITION SCREEN (New Feature) ==================== -->
+    <section id="screen-stage-transition" class="hidden w-full h-full min-h-[500px] flex flex-col justify-end items-center pt-6 px-6 pb-0 md:pt-12 md:px-12 md:pb-0 -mb-4 md:-mb-6 animate__animated animate__fadeIn">
+      <!-- Floating Glass Card at the Bottom-Center (Compact size, unobstructed view of the top/center) -->
+      <div class="w-full max-w-sm bg-slate-950/85 backdrop-blur-md p-6 rounded-3xl border border-blue-500/30 shadow-card-dark space-y-5 animate__animated animate__slideInUp">
+        <div class="space-y-1.5 text-center">
+          <span class="px-3 py-1 bg-blue-950 text-blue-300 text-[10px] font-bold uppercase tracking-wider rounded-full border border-blue-500/30 inline-block" id="transition-stage-label">
+            STAGE 1
+          </span>
+          <h2 class="text-lg md:text-xl font-bold text-white" id="transition-stage-title">
+            ยุคหินฟลิ้นท์สโตน
+          </h2>
+          <p class="text-slate-300 text-xs leading-relaxed" id="transition-stage-desc">
+            คำอธิบายด่านอธิบายรายละเอียดสั้นๆ ที่นี่
+          </p>
+        </div>
+        
+        <button id="btn-transition-start" onclick="enterStageFromTransition()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm rounded-2xl shadow-neon-blue transition-all flex items-center justify-center space-x-2">
+          <span id="btn-transition-text">เดินทางไปยังด่านต่อไป</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== 5. GAMEPLAY SCREEN ==================== -->
+    <section id="screen-gameplay" class="hidden w-full flex flex-col lg:flex-row gap-6 items-stretch animate__animated animate__fadeIn">
+      
+      <!-- Central Interactive Card (Main Slide) -->
+      <div class="w-full lg:flex-grow bg-slate-900/85 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-card-dark border border-blue-500/20 flex flex-col justify-between min-h-[520px] relative overflow-hidden">
+        
+        <!-- Slide Top Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-800">
+          <div class="flex items-center space-x-2.5">
+            <span id="stage-badge" class="px-3 py-1 bg-purple-950/60 text-purple-300 rounded-full text-xs font-bold border border-purple-500/30">
+              Stage 1 / 5
+            </span>
+            <span class="text-xs text-slate-600 font-medium">|</span>
+            <span id="slide-info-pill" class="px-3 py-1 bg-slate-950/60 text-slate-300 rounded-full text-xs font-semibold border border-slate-800">
+              เฟืองมิติชิ้นที่ 1
+            </span>
+            <span class="text-xs text-slate-600 font-medium">|</span>
+            <!-- Timer Badge -->
+            <div id="timer-badge" class="flex items-center space-x-1.5 bg-slate-950/60 text-slate-300 px-2.5 py-1 rounded-full border border-slate-800 text-xs font-bold">
+              <i class="fa-solid fa-stopwatch animate-spin" style="animation-duration: 6s;"></i>
+              <span id="timer-seconds" class="font-mono">40</span><span>s</span>
+            </div>
+          </div>
+          
+          <!-- Progress Bar -->
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <span class="text-xs text-slate-400 font-medium">ความคืบหน้า</span>
+            <div class="w-24 sm:w-32 h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+              <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <span id="progress-text" class="text-xs font-bold text-slate-300 font-mono">0%</span>
+          </div>
+        </div>
+
+        <!-- Question Header Area -->
+        <div class="mt-6 space-y-2">
+          <div class="flex items-start space-x-3">
+            <div class="w-7 h-7 rounded-lg bg-blue-950/60 border border-blue-500/30 text-blue-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5" id="question-number">
+              1
+            </div>
+            <div class="space-y-1">
+              <h2 id="question-text" class="text-lg md:text-xl font-bold text-slate-100 leading-relaxed">
+                กำลังโหลดคำถาม...
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Question Workspace -->
+        <div id="question-workspace" class="my-6 flex-grow flex items-center justify-center relative min-h-[220px] w-full">
+          <!-- Dynamic components will be injected here -->
+        </div>
+
+        <!-- Slide Bottom Actions -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-slate-800">
+          
+          <!-- Bottom Left: Hint & Sound Controls -->
+          <div class="flex items-center space-x-2">
+            <button onclick="showHint()" class="px-3.5 py-2 bg-slate-950/60 hover:bg-slate-900/80 border border-slate-800 rounded-xl text-xs font-semibold text-slate-300 flex items-center space-x-1.5 transition-all">
+              <i class="fa-regular fa-lightbulb text-amber-400"></i>
+              <span>ขอคำใบ้ (Hint)</span>
+            </button>
+            <button onclick="toggleSound()" id="btn-sound-toggle" class="p-2 bg-slate-950/60 hover:bg-slate-900/80 border border-slate-800 rounded-xl text-slate-300 transition-all" title="เปิด/ปิดเสียง">
+              <i class="fa-solid fa-volume-high text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Bottom Right: Submit Button -->
+          <button id="btn-submit" onclick="checkAnswer()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-neon-blue transition-all flex items-center justify-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
+            <span>ส่งคำตอบ (Submit)</span>
+            <i class="fa-solid fa-paper-plane text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Floating Zoom/Accessibility Controls (Shifted to Left of BGM) -->
+        <div class="absolute bottom-4 right-16 sm:right-20 sm:bottom-20 flex flex-col bg-slate-950/85 border border-slate-800 rounded-full shadow-2xl p-1 space-y-1 z-30">
+          <button onclick="adjustTextSize(1)" class="w-8 h-8 flex items-center justify-center rounded-full text-slate-300 hover:bg-slate-900 transition-colors" title="ขยายตัวอักษร">
+            <i class="fa-solid fa-plus text-xs"></i>
+          </button>
+          <hr class="border-slate-800">
+          <button onclick="adjustTextSize(-1)" class="w-8 h-8 flex items-center justify-center rounded-full text-slate-300 hover:bg-slate-900 transition-colors" title="ลดขนาดตัวอักษร">
+            <i class="fa-solid fa-minus text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Instant Feedback Overlay -->
+        <div id="feedback-overlay" class="hidden absolute inset-0 rounded-3xl z-40 flex flex-col items-center justify-center p-6 text-center transition-all duration-300">
+          <div class="absolute inset-0 bg-slate-950/95 backdrop-blur-sm rounded-3xl"></div>
+          
+          <div class="relative z-10 space-y-5 animate__animated animate__zoomIn max-w-md">
+            <div id="feedback-icon" class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+              <!-- Icon will be set dynamically -->
+            </div>
+            <h3 id="feedback-title" class="text-2xl font-bold text-white">
+              ถูกต้อง!
+            </h3>
+            <p id="feedback-message" class="text-slate-300 text-sm md:text-base leading-relaxed">
+              คุณกู้คืนเฟืองมิติได้สำเร็จ
+            </p>
+            <button onclick="nextQuestion()" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-neon-blue hover:scale-105 active:scale-95 transition-all">
+              ข้อถัดไป (Next) <i class="fa-solid fa-arrow-right text-xs ml-1"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Sidebar: Slide Thumbnails Navigation -->
+      <div class="w-full lg:w-80 flex flex-col gap-4">
+        
+        <!-- Sidebar Header -->
+        <div class="bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-blue-500/20 shadow-sm flex justify-between items-center">
+          <span class="text-xs font-bold text-blue-300 uppercase tracking-wider">เฟืองมิติทั้งหมด (15 ข้อ)</span>
+          <div class="flex items-center space-x-1" id="stage-stars-preview">
+            <!-- Stars dynamic -->
+          </div>
+        </div>
+
+        <!-- Vertical Slides List -->
+        <div class="flex lg:flex-col gap-2.5 overflow-x-auto lg:overflow-y-auto max-h-[120px] lg:max-h-[420px] p-1.5 bg-slate-950/50 rounded-2xl border border-slate-800">
+          <div id="slides-list" class="flex lg:flex-col gap-2 w-full min-w-max lg:min-w-0">
+            <!-- Dynamic slide items will be injected here -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== 6. END SCREEN ==================== -->
+    <section id="screen-end" class="hidden w-full max-w-4xl flex flex-col md:flex-row gap-6 items-stretch animate__animated animate__fadeIn">
+      
+      <!-- Left Box: Performance Summary -->
+      <div class="w-full md:w-5/12 bg-slate-900/85 backdrop-blur-md p-8 rounded-3xl shadow-card-dark border border-blue-500/25 flex flex-col justify-between text-center space-y-6">
+        <div class="space-y-2">
+          <span class="px-3 py-1 bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 text-xs font-bold rounded-full">
+            ภารกิจสำเร็จ (Mission Complete)
+          </span>
+          <h2 class="text-2xl font-bold text-white">
+            บันทึกกู้เวลามิติ
+          </h2>
+        </div>
+
+        <!-- Big Clock Status & Score -->
+        <div class="space-y-4">
+          <div class="relative w-32 h-32 mx-auto flex items-center justify-center bg-slate-950 rounded-full border-4 border-blue-500 shadow-neon-blue clock-pulse">
+            <div class="text-center">
+              <span id="end-final-score" class="block text-3xl font-bold text-white font-orbitron">15</span>
+              <span class="text-[10px] text-blue-300 font-bold uppercase tracking-wider font-orbitron">GEARS</span>
+            </div>
+          </div>
+          <div>
+            <div class="text-xs text-slate-400 font-medium">สถานะนาฬิกาจักรวาล</div>
+            <div id="end-clock-status" class="text-base font-bold text-blue-400 text-glow-blue">ซ่อมแซมสมบูรณ์ 100%</div>
+          </div>
+        </div>
+
+        <!-- Stars display per stage -->
+        <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-2 text-left">
+          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">ดาวที่ได้รับในแต่ละด่าน:</h4>
+          <div id="end-stars-list" class="space-y-1.5 text-xs">
+            <!-- Stage stars will be injected here -->
+          </div>
+        </div>
+
+        <!-- Play again action -->
+        <button onclick="resetGame()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-2xl shadow-neon-blue transition-all">
+          <i class="fa-solid fa-rotate-left mr-1 text-sm"></i> เล่นอีกครั้ง (Play Again)
+        </button>
+      </div>
+
+      <!-- Right Box: Leaderboard -->
+      <div class="w-full md:w-7/12 bg-slate-900/85 backdrop-blur-md p-8 rounded-3xl shadow-card-dark border border-blue-500/25 flex flex-col justify-between space-y-4">
+        <div class="space-y-1">
+          <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+            <i class="fa-solid fa-trophy text-amber-400"></i>
+            <span>ตารางผู้พิทักษ์เวลาดีเด่น (Leaderboard)</span>
+          </h3>
+          <p class="text-xs text-slate-400 font-medium">ผู้ทำเวลาในการซ่อมแซมนาฬิกามิติได้ดีที่สุดในระบบ</p>
+        </div>
+
+        <!-- Leaderboard Table Container -->
+        <div class="flex-grow overflow-y-auto max-h-[300px] bg-slate-950/60 rounded-2xl border border-slate-800/80">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 text-[10px] font-bold uppercase bg-slate-900/40">
+                <th class="py-3 px-4 text-center">อันดับ</th>
+                <th class="py-3 px-4">ชื่อผู้เล่น</th>
+                <th class="py-3 px-4 text-center">ห้อง/เลขที่</th>
+                <th class="py-3 px-4 text-center">คะแนนสะสม</th>
+                <th class="py-3 px-4 text-center">ดาว</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body" class="divide-y divide-slate-100 text-xs">
+              <!-- Leaderboard rows will be injected here -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Info / Note -->
+        <div class="p-3 bg-blue-950/30 border border-blue-500/20 rounded-xl flex items-start space-x-2.5 text-xs text-blue-300">
+          <i class="fa-solid fa-circle-info mt-0.5 text-blue-400 flex-shrink-0"></i>
+          <span>
+            ตารางจัดอันดับนี้ซิงค์แบบเรียลไทม์กับฐานข้อมูลระบบจัดเก็บคะแนน โดยใช้ Google Apps Script Webhook เพื่อติดตามความก้าวหน้าของทุกคน!
+          </span>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Bottom Notification Toast -->
+  <div id="toast-pill" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-950/95 border border-slate-800 text-white text-xs px-6 py-3 rounded-full shadow-2xl flex items-center space-x-3 z-50 animate__animated animate__fadeInUp">
+    <span id="toast-message">แจ้งเตือนข้อมูลระบบ</span>
+    <span class="text-slate-700">|</span>
+    <button onclick="hideToast()" class="text-blue-400 font-bold hover:text-blue-300">ปิด</button>
+  </div>
+
+  <!-- Leaderboard Modal -->
+  <div id="modal-leaderboard" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm" onclick="closeLeaderboardModal()"></div>
+    <div class="relative w-full max-w-xl bg-slate-900/95 border border-blue-500/30 rounded-3xl p-6 md:p-8 shadow-card-dark animate__animated animate__zoomIn">
+      <div class="flex justify-between items-center mb-4">
+        <h3 onclick="adminClearLeaderboard()" class="text-lg font-bold text-white flex items-center space-x-2 cursor-pointer select-none" title="คลิก 5 ครั้งเพื่อล้างข้อมูลแคชในเครื่องนี้">
+          <i class="fa-solid fa-trophy text-amber-400"></i>
+          <span>ทำเนียบผู้พิทักษ์เวลา</span>
+        </h3>
+        <button onclick="closeLeaderboardModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="overflow-y-auto max-h-[320px] bg-slate-950/60 rounded-2xl border border-slate-800/80">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-800 text-slate-400 text-[10px] font-bold uppercase bg-slate-900/40">
+              <th class="py-3 px-4 text-center">อันดับ</th>
+              <th class="py-3 px-4">ชื่อผู้เล่น</th>
+              <th class="py-3 px-4 text-center">ห้อง/เลขที่</th>
+              <th class="py-3 px-4 text-center">คะแนนสะสม</th>
+              <th class="py-3 px-4 text-center">ดาว</th>
+            </tr>
+          </thead>
+          <tbody id="modal-leaderboard-body" class="divide-y divide-slate-100/5 text-xs">
+            <!-- Dynamic rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Card Modal -->
+  <div id="modal-special-card" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm" onclick="closeCardModal()"></div>
+    <div class="relative w-full max-w-sm bg-slate-900/95 border border-amber-500/30 rounded-3xl p-6 shadow-card-dark animate__animated animate__zoomIn text-center space-y-4">
+      <div class="w-12 h-12 bg-amber-950/50 rounded-2xl flex items-center justify-center text-amber-400 mx-auto border border-amber-500/30">
+        <i class="fa-solid fa-ticket-simple text-xl"></i>
+      </div>
+      <div class="space-y-1">
+        <h3 class="text-base font-bold text-white">ใช้การ์ดพิเศษกู้เวลา</h3>
+        <p class="text-xs text-slate-400">กรอกรหัสลับ 6 หลักที่ได้รับจากการ์ดกระดาษพิเศษของคุณ</p>
+      </div>
+
+      <div class="space-y-3">
+        <input type="text" id="card-code-input" maxlength="6" placeholder="------"
+          class="w-full px-4 py-3 bg-slate-950/80 border-2 border-slate-800 focus:border-amber-500 focus:outline-none rounded-xl text-center text-lg font-mono font-bold tracking-widest text-white">
+        
+        <button onclick="submitCardCode()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold rounded-xl transition-all active:scale-95">
+          เปิดใช้งานพลังการ์ด
+        </button>
+      </div>
+
+      <div id="active-card-status" class="text-xs text-emerald-400 font-semibold hidden">
+        <!-- Active card status -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Feedback Modal (Success/Failure) -->
+  <div id="modal-card-feedback" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 animate__animated animate__fadeIn">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm" onclick="closeCardFeedbackModal()"></div>
+    <div class="relative w-full max-w-sm bg-slate-900/95 border rounded-3xl p-6 shadow-card-dark text-center space-y-4 animate__animated animate__zoomIn" id="card-feedback-content">
+      <div id="card-feedback-icon" class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl shadow-lg border">
+        <!-- Emoji/Icon -->
+      </div>
+      <!-- Card Image (Optional, shown only on success) -->
+      <div id="card-feedback-image-container" class="hidden w-full max-w-[180px] mx-auto rounded-2xl overflow-hidden border border-slate-800 shadow-lg">
+        <img id="card-feedback-image" src="" alt="Card Image" class="w-full h-auto object-cover">
+      </div>
+      <div class="space-y-1.5">
+        <h3 id="card-feedback-title" class="text-lg font-bold text-white">หัวข้อผลลัพธ์</h3>
+        <p id="card-feedback-desc" class="text-xs text-slate-300 leading-relaxed">รายละเอียดผลการทำงานของการ์ด</p>
+      </div>
+      <button onclick="closeCardFeedbackModal()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all active:scale-95 text-sm">
+        ตกลง (Close)
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Resume Session Modal -->
+  <div id="modal-resume" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 animate__animated animate__fadeIn">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-sm bg-slate-900/95 border border-blue-500/30 rounded-3xl p-6 shadow-card-dark text-center space-y-5 animate__animated animate__zoomIn">
+      <div class="w-16 h-16 bg-blue-950/50 rounded-full flex items-center justify-center text-blue-400 mx-auto border border-blue-500/30 clock-pulse">
+        <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-lg font-bold text-white">พบประวัติการเล่นเดิม</h3>
+        <p id="resume-text" class="text-xs text-slate-300 leading-relaxed">
+          มีข้อมูลการเล่นที่ยังทำไม่เสร็จในระบบ ต้องการเล่นต่อจากเดิมหรือไม่?
+        </p>
+      </div>
+      <div class="flex space-x-3 pt-1">
+        <button onclick="confirmResume(true)" class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl transition-all active:scale-95 text-xs">
+          เล่นต่อจากเดิม
+        </button>
+        <button onclick="confirmResume(false)" class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl transition-all active:scale-95 text-xs">
+          เริ่มใหม่ทั้งหมด
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Milestone Reward Modal -->
+  <div id="modal-milestone" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm"></div>
+    <div class="relative w-full max-w-sm bg-slate-900/95 border border-purple-500/30 rounded-3xl p-6 shadow-card-dark animate__animated animate__zoomIn text-center space-y-5">
+      <div class="w-16 h-16 bg-purple-950/50 rounded-full flex items-center justify-center text-purple-400 mx-auto border border-purple-500/30 clock-pulse">
+        <i class="fa-solid fa-gift text-2xl animate-bounce"></i>
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-lg font-bold text-white">🎉 ยินดีด้วย! ผู้พิทักษ์เวลา</h3>
+        <p id="milestone-text" class="text-xs text-slate-300 leading-relaxed">
+          คะแนนสะสมของคุณถึง 500 คะแนนแล้ว! ไปรับการ์ดกระดาษพิเศษเพื่อนำรหัสมากรอกในเกมได้เลย!
+        </p>
+      </div>
+      <button onclick="closeMilestoneModal()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all">
+        รับทราบภารกิจ
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Special Card Button (Always visible during gameplay) -->
+  <div id="floating-card-trigger" class="hidden">
+    <button onclick="openCardModal()" class="fixed bottom-6 left-6 z-40 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold px-4 py-2.5 rounded-2xl shadow-neon-gold flex items-center space-x-2 transition-all hover:scale-105 active:scale-95">
+      <i class="fa-solid fa-ticket-simple text-sm"></i>
+      <span class="text-xs md:text-sm font-bold">ใช้การ์ดพิเศษ</span>
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w-full py-4 text-center text-[11px] text-slate-500 border-t border-slate-900/80 bg-slate-950/80 z-10 relative">
+    <p>© 2026 Time Travelers: ซ่อมนาฬิกามิติ พิชิตอนาคต • พัฒนาโดย Phankon sisaeg • Grade 5 Computing Science Project</p>
+  </footer>
+
+  <!-- Web Audio API Synthesizer & Game Logic Script -->
+  <script>
+    // =========================================================================
+    // 1. BACKGROUND MUSIC (BGM) CONTROLLER
+    // =========================================================================
+    const bgm = {
+      audio: null,
+      isMuted: false,
+      volume: 0.10,
+      currentTrack: null,
+      tracks: {
+        main: 'bgm_main.mp3',      // เพลงหน้าแรก / กติกา / สรุปผล
+        stage1: 'bgm_stage1.mp3',  // ด่าน 1: ยุคหิน (Primitive/Drums)
+        stage2: 'bgm_stage2.mp3',  // ด่าน 2: อียิปต์ (Desert/Mysterious)
+        stage3: 'bgm_stage3.mp3',  // ด่าน 3: อัศวิน (Orchestral/Epic)
+        stage4: 'bgm_stage4.mp3',  // ด่าน 4: ไซเบอร์พังค์ (Synthwave/Electronic)
+        stage5: 'bgm_stage5.mp3'   // ด่าน 5: อวกาศ (Space Ambient)
+      },
+      
+      play(trackKey) {
+        if (this.currentTrack === trackKey && this.audio && !this.audio.paused) {
+          return;
+        }
+        this.stop();
+        
+        const file = this.tracks[trackKey];
+        if (!file) return;
+        
+        try {
+          this.audio = new Audio(file);
+          this.audio.loop = true;
+          this.audio.volume = this.isMuted ? 0 : this.volume;
+          this.currentTrack = trackKey;
+          
+          const playPromise = this.audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              // กรณีบราวเซอร์บล็อก Autoplay ให้รอผู้เล่นกดคลิกหน้าจอครั้งแรกแล้วค่อยเล่นเพลง
+              const startPlay = () => {
+                if (this.audio && this.currentTrack === trackKey) {
+                  this.audio.play().catch(e => console.warn("Autoplay still blocked:", e));
+                }
+                document.removeEventListener('click', startPlay);
+              };
+              document.addEventListener('click', startPlay);
+            });
+          }
+        } catch (e) {
+          console.warn("Failed to play BGM:", e);
+        }
+      },
+      
+      stop() {
+        if (this.audio) {
+          this.audio.pause();
+          this.audio = null;
+        }
+        this.currentTrack = null;
+      },
+      
+      setVolume(val) {
+        this.volume = parseFloat(val);
+        if (this.audio && !this.isMuted) {
+          this.audio.volume = this.volume;
+        }
+      },
+      
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        if (this.audio) {
+          this.audio.volume = this.isMuted ? 0 : this.volume;
+        }
+        
+        const icon = document.querySelector('#btn-bgm-toggle i');
+        if (icon) {
+          if (this.isMuted) {
+            icon.className = 'fa-solid fa-volume-xmark';
+          } else {
+            icon.className = 'fa-solid fa-volume-high';
+          }
+        }
+      }
+    };
+
+    function toggleBgmMute() {
+      bgm.toggleMute();
+    }
+
+    function changeBgmVolume(val) {
+      bgm.setVolume(val);
+      const percentEl = document.getElementById('bgm-volume-percent');
+      if (percentEl) {
+        percentEl.textContent = `${Math.round(val * 100)}%`;
+      }
+    }
+
+    function toggleBgmVolumeSlider(e) {
+      if (e) e.stopPropagation();
+      const sliderContainer = document.getElementById('bgm-slider-container');
+      if (sliderContainer) {
+        if (sliderContainer.classList.contains('w-0')) {
+          sliderContainer.classList.remove('w-0');
+          sliderContainer.classList.add('w-24');
+        } else {
+          sliderContainer.classList.remove('w-24');
+          sliderContainer.classList.add('w-0');
+        }
+      }
+    }
+
+    // Auto-hide volume slider when clicking outside
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('bgm-controller-container');
+      const sliderContainer = document.getElementById('bgm-slider-container');
+      if (container && sliderContainer && !container.contains(e.target)) {
+        sliderContainer.classList.remove('w-24');
+        sliderContainer.classList.add('w-0');
+      }
+    });
+
+    // =========================================================================
+    // 2. SOUND SYNTHESIZER (Web Audio API)
+    // =========================================================================
+    class SoundEffects {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+
+      init() {
+        try {
+          if (!this.ctx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) {
+              this.ctx = new AudioContextClass();
+            }
+          }
+        } catch (e) {
+          console.warn("Web Audio API not supported or blocked:", e);
+        }
+      }
+
+      playClick() {
+        if (this.muted) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+          
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1200, this.ctx.currentTime + 0.08);
+
+          gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.08);
+        } catch (e) {
+          console.warn("Failed to play click sound:", e);
+        }
+      }
+
+      playCorrect() {
+        if (this.muted) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+
+          let now = this.ctx.currentTime;
+          let notes = [523.25, 659.25, 783.99, 1046.50];
+          
+          notes.forEach((freq, index) => {
+            let osc = this.ctx.createOscillator();
+            let gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + index * 0.08);
+
+            gain.gain.setValueAtTime(0, now + index * 0.08);
+            gain.gain.linearRampToValueAtTime(0.12, now + index * 0.08 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.08 + 0.25);
+
+            osc.start(now + index * 0.08);
+            osc.stop(now + index * 0.08 + 0.25);
+          });
+        } catch (e) {
+          console.warn("Failed to play correct sound:", e);
+        }
+      }
+
+      playIncorrect() {
+        if (this.muted) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+
+          let now = this.ctx.currentTime;
+          
+          let osc1 = this.ctx.createOscillator();
+          let osc2 = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(150, now);
+          osc1.frequency.linearRampToValueAtTime(100, now + 0.3);
+
+          osc2.type = 'square';
+          osc2.frequency.setValueAtTime(147, now);
+          osc2.frequency.linearRampToValueAtTime(97, now + 0.3);
+
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+          osc1.start(now);
+          osc2.start(now);
+          
+          osc1.stop(now + 0.3);
+          osc2.stop(now + 0.3);
+        } catch (e) {
+          console.warn("Failed to play incorrect sound:", e);
+        }
+      }
+
+      playStageClear() {
+        if (this.muted) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+
+          let now = this.ctx.currentTime;
+          let notes = [587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50];
+          
+          notes.forEach((freq, index) => {
+            let osc = this.ctx.createOscillator();
+            let gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + index * 0.07);
+
+            gain.gain.setValueAtTime(0, now + index * 0.07);
+            gain.gain.linearRampToValueAtTime(0.1, now + index * 0.07 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.07 + 0.2);
+
+            osc.start(now + index * 0.07);
+            osc.stop(now + index * 0.07 + 0.2);
+          });
+        } catch (e) {
+          console.warn("Failed to play stage clear sound:", e);
+        }
+      }
+
+      playVictory() {
+        if (this.muted) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+
+          let now = this.ctx.currentTime;
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.exponentialRampToValueAtTime(900, now + 1.0);
+
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.linearRampToValueAtTime(0.1, now + 0.5);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
+
+          osc.start(now);
+          osc.stop(now + 1.2);
+
+          let chord = [523.25, 659.25, 783.99, 1046.50];
+          chord.forEach((freq) => {
+            let o = this.ctx.createOscillator();
+            let g = this.ctx.createGain();
+            o.connect(g);
+            g.connect(this.ctx.destination);
+            
+            o.type = 'triangle';
+            o.frequency.setValueAtTime(freq, now + 1.0);
+            
+            g.gain.setValueAtTime(0, now + 1.0);
+            g.gain.linearRampToValueAtTime(0.08, now + 1.1);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+
+            o.start(now + 1.0);
+            o.stop(now + 2.5);
+          });
+        } catch (e) {
+          console.warn("Failed to play victory sound:", e);
+        }
+      }
+    }
+
+    const sfx = new SoundEffects();
+
+    function toggleSound() {
+      sfx.muted = !sfx.muted;
+      const btn = document.getElementById('btn-sound-toggle');
+      if (sfx.muted) {
+        btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-xs text-rose-500"></i>';
+        showToast('ปิดเสียงเอฟเฟกต์แล้ว');
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-volume-high text-xs text-blue-400"></i>';
+        showToast('เปิดเสียงเอฟเฟกต์แล้ว');
+        sfx.playClick();
+      }
+    }
+
+    // =========================================================================
+    // 2. TEXT SIZE ACCESSIBILITY CONTROL
+    // =========================================================================
+    let currentTextSizePercent = 100;
+    function adjustTextSize(direction) {
+      sfx.playClick();
+      currentTextSizePercent += direction * 10;
+      if (currentTextSizePercent < 80) currentTextSizePercent = 80;
+      if (currentTextSizePercent > 150) currentTextSizePercent = 150;
+      
+      const qText = document.getElementById('question-text');
+      qText.style.fontSize = `${currentTextSizePercent}%`;
+      
+      showToast(`ปรับขนาดตัวอักษรเป็น ${currentTextSizePercent}%`);
+    }
+
+    // =========================================================================
+    // 3. TOAST NOTIFICATION CONTROL
+    // =========================================================================
+    let toastTimeout;
+    function showToast(message, durationMs = 3000) {
+      const toast = document.getElementById('toast-pill');
+      const msg = document.getElementById('toast-message');
+      
+      msg.textContent = message;
+      toast.classList.remove('hidden');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        hideToast();
+      }, durationMs);
+    }
+
+    function hideToast() {
+      const toast = document.getElementById('toast-pill');
+      toast.classList.add('hidden');
+    }
+
+    // =========================================================================
+    // 4. GAME DATA & QUESTIONS (AS SPECIFIED BY USER)
+    // =========================================================================
+    const questions = [
+      // --- STAGE 1: ยุคหินฟลิ้นท์สโตน (MCQ) ---
+      {
+        id: 1,
+        stage: 1,
+        type: 'mcq',
+        questionText: '"ถ้ามนุษย์ถ้ำเดินไปเจอเสือโคร่งตาโต เขาจะวิ่งหนี แต่ถ้าเจอไดโนเสาร์กินพืช เขาจะขี่มัน"<br><br>โจทย์: <strong class="text-blue-300">มนุษย์ถ้ำเดินไปเจอไดโนเสาร์กินพืช</strong> ผลลัพธ์ที่เกิดขึ้นคืออะไร?',
+        description: 'วิเคราะห์ผลลัพธ์จากเงื่อนไข "ถ้า...แล้ว..." (If-Else) อย่างง่าย',
+        hint: 'ดูที่เงื่อนไขประโยคที่สอง: "...แต่ถ้าเจอไดโนเสาร์กินพืช เขาจะขี่มัน"',
+        options: [
+          { id: 'A', text: 'ก. วิ่งหนี' },
+          { id: 'B', text: 'ข. ขี่มัน' },
+          { id: 'C', text: 'ค. ยืนนิ่ง' }
+        ],
+        correctAnswer: 'B'
+      },
+      {
+        id: 2,
+        stage: 1,
+        type: 'mcq',
+        questionText: 'กลไกเติมน้ำในถ้ำระบุเงื่อนไขปุ่มเปิดปิดไว้ว่า:<br>"ถ้าดึงเชือกสีแดง น้ำจะไหล แต่ถ้าดึงเชือกสีเขียว ไฟจะจุดติด"<br><br>โจทย์: ถ้านักเรียนต้องการ <strong class="text-rose-400">ดับไฟในถ้ำ</strong> และ <strong class="text-blue-300">ต้องการน้ำ</strong> ต้องดึงเชือกสีอะไร?',
+        description: 'เลือกปุ่มสั่งการทำงานของระบบเพื่อดับไฟและเรียกน้ำมาใช้',
+        hint: 'เมื่อดึงเชือกสีแดง น้ำจะไหลออกมาดับไฟในถ้ำ และได้น้ำตามต้องการพอดี',
+        options: [
+          { id: 'A', text: 'ก. สีแดง' },
+          { id: 'B', text: 'ข. สีเขียว' },
+          { id: 'C', text: 'ค. ดึงพร้อมกันทั้งคู่' }
+        ],
+        correctAnswer: 'A'
+      },
+      {
+        id: 3,
+        stage: 1,
+        type: 'mcq',
+        questionText: 'สูตรการทำอาหารพลังงานสูงของเผ่าหินคือ:<br><strong class="text-amber-400">เนื้อ 1 ชิ้น + ผลไม้ 2 ลูก = อาหารพลังงานสูง 1 จาน</strong><br><br>โจทย์: ถ้าตอนนี้นักเรียนมี <strong class="text-rose-400">เนื้อ 2 ชิ้น</strong> และ <strong class="text-emerald-400">ผลไม้ 4 ลูก</strong> จะสามารถทำอาหารพลังงานสูงได้กี่จาน?',
+        description: 'คำนวณสัดส่วนวัตถุดิบและผลลัพธ์ของอาหารที่ได้',
+        hint: 'เนื้อ 1 ชิ้นได้ 1 จาน, ผลไม้ 2 ลูกได้ 1 จาน ลองดูว่าถ้าเพิ่มเป็นสองเท่าจะได้อาหารกี่จานเอ่ย?',
+        options: [
+          { id: 'A', text: 'ก. 1 จาน' },
+          { id: 'B', text: 'ข. 2 จาน' },
+          { id: 'C', text: 'ค. 3 จาน' }
+        ],
+        correctAnswer: 'B'
+      },
+
+      // --- STAGE 2: อาณาจักรอียิปต์โบราณ (Text Input) ---
+      {
+        id: 4,
+        stage: 2,
+        type: 'text',
+        questionText: 'ประตูห้องเก็บสมบัติพีระมิดมีรหัสลับตัวเลขระบุไว้คือ:<br><strong class="text-purple-400 font-bold text-xl">2, 4, 6, 8, ...</strong><br><br>โจทย์: ตัวเลขถัดไปคือรหัสที่จะใช้เปิดประตู จงพิมพ์ตัวเลขรหัสเปิดประตูนี้ให้ถูกต้อง',
+        description: 'คาดการณ์ผลลัพธ์ถัดไปจากลำดับรูปแบบตัวเลข',
+        hint: 'ตัวเลขเพิ่มขึ้นทีละเท่าไหร่? 2 ไป 4 เพิ่มขึ้น 2... 4 ไป 6 เพิ่มขึ้น 2... ลองบวกต่อจาก 8 ดูสิครับ',
+        placeholder: 'พิมพ์รหัสตัวเลขที่นี่...',
+        correctAnswer: ['10', 'สิบ', 'ten']
+      },
+      {
+        id: 5,
+        stage: 2,
+        type: 'text',
+        questionText: 'การเลื่อนก้อนหินตราอักษรภาพโบราณเรียงลำดับกันตามภาพดังนี้:<br><strong class="text-blue-400">นก ➡️ งู ➡️ ดวงอาทิตย์ ➡️ นก ➡️ งู ➡️ [?]</strong><br><br>โจทย์: อักษรภาพในช่องว่าง [?] คือรูปภาพใด? (พิมพ์คำตอบเป็นข้อความภาษาไทย)',
+        description: 'ค้นหารูปแบบลำดับรูปภาพที่เป็นระเบียบชุดถัดไป',
+        hint: 'ดูวงรอบการทำงาน: นก, งู, ดวงอาทิตย์ แล้ววนกลับมา นก, งู... ตัวต่อไปต้องเป็นอะไร?',
+        placeholder: 'พิมพ์คำศัพท์ชื่อรูปภาพ...',
+        correctAnswer: ['ดวงอาทิตย์', 'พระอาทิตย์', 'sun']
+      },
+      {
+        id: 6,
+        stage: 2,
+        type: 'text',
+        questionText: 'หุ่นยนต์เฝ้าสมบัติจะเดินไปรอบๆ ตามโปรแกรมคำสั่งดังนี้:<br><strong class="text-amber-400">"เดินหน้า 3 ก้าว, ถอยหลัง 1 ก้าว" (เมื่อทำเสร็จนับเป็น 1 รอบ)</strong><br><br>โจทย์: ถ้าหุ่นยนต์ทำตามคำสั่งนี้ซ้ำกัน <strong class="text-rose-400">2 รอบ</strong> หุ่นยนต์จะอยู่ห่างจากจุดเริ่มต้นไปข้างหน้ากี่ก้าว? (พิมพ์เฉพาะตัวเลข)',
+        description: 'คำนวณระยะทางสุทธิของการเคลื่อนที่แบบวนซ้ำของหุ่นยนต์',
+        hint: 'รอบแรก: เดินหน้า 3 ถอย 1 = อยู่ห่าง 2 ก้าว... ถ้าทำรอบสองเพิ่มอีก จะขยับไปกี่ก้าวนะ?',
+        placeholder: 'พิมพ์เฉพาะตัวเลขผลลัพธ์...',
+        correctAnswer: ['4', 'สี่', 'four']
+      },
+
+      // --- STAGE 3: ปราสาทอัศวินยุคกลาง (Drag & Drop / Reorder & Pairing) ---
+      {
+        id: 7,
+        stage: 3,
+        type: 'reorder',
+        questionText: 'จงจัดเรียงขั้นตอนการปรุงยาถอนพิษเพื่อช่วยชีวิตอัศวินให้ถูกต้องตามเงื่อนไข:<br><br><strong class="text-emerald-400">เงื่อนไข: "ต้องต้มน้ำให้เดือดก่อนใส่สมุนไพร และเทผงเวทมนตร์ลงไปเป็นสิ่งสุดท้าย"</strong>',
+        description: 'เรียงลำดับขั้นตอน (Algorithm) เพื่อป้องกันสูตรยาผิดพลาด',
+        hint: 'อันดับ 1 คือน้ำเดือด ➡️ อันดับ 2 คือสมุนไพร ➡️ อันดับ 3 คือผงเวทมนตร์ตัวท้ายสุด',
+        items: [
+          { id: 'pot3', text: 'เทผงเวทมนตร์ลงในหม้อปรุงยา (เทเป็นสิ่งสุดท้าย)' },
+          { id: 'pot1', text: 'ต้มน้ำในหม้อปรุงยาให้เดือด (ต้องทำเป็นสิ่งแรก)' },
+          { id: 'pot2', text: 'ใส่ใบสมุนไพรรักษาลงไปต้ม (ใส่หลังจากต้มน้ำแล้ว)' }
+        ],
+        correctAnswer: ['pot1', 'pot2', 'pot3']
+      },
+      {
+        id: 8,
+        stage: 3,
+        type: 'keymatch', // Custom layout for key matching
+        questionText: 'จงลากกุญแจเรขาคณิต (ด้านล่าง) ไปจับคู่กับแม่กุญแจที่มีจำนวนเหลี่ยมเท่ากันให้ถูกต้องเพื่อเปิดหีบสมบัติ:<br><br><strong class="text-blue-300">เงื่อนไข: กุญแจทรงสามเหลี่ยม 🔑 คู่กับ แม่กุญแจสามเหลี่ยม 🔒 (3 เหลี่ยมเหมือนกัน)</strong>',
+        description: 'ใช้เงื่อนไขคุณสมบัติรูปทรงเรขาคณิตมาจับคู่ความสัมพันธ์',
+        hint: 'นับจำนวนมุมหรือเหลี่ยมของรูปทรง: 3 เหลี่ยม คู่กับ 3 เหลี่ยม, 4 เหลี่ยม คู่กับ 4 เหลี่ยม',
+        correctAnswer: {
+          'key3': 'lock3',
+          'key4': 'lock4',
+          'key5': 'lock5'
+        }
+      },
+      {
+        id: 9,
+        stage: 3,
+        type: 'reorder',
+        questionText: 'จงจัดการจัดคิวปล่อยม้าศึกของอัศวินออกจากคอกตามเงื่อนไขความเร็วความไวในการวิ่ง:<br><br><strong class="text-amber-300">เงื่อนไข: "ม้าสีขาวที่วิ่งไวที่สุดต้องออกตัวก่อนเพื่อน ส่วนม้าสีดำที่วิ่งช้าสุดต้องออกตัวทีหลังสุด"</strong>',
+        description: 'จัดลำดับคิวก่อนหลังตามระดับความสำคัญหรือความเร็วของข้อมูล',
+        hint: 'เรียงจากเร็วที่สุดไปช้าที่สุด: ขาว ➡️ น้ำตาล ➡️ ดำ',
+        items: [
+          { id: 'horse3', text: 'ม้าสีน้ำตาล (ความเร็วปานกลาง)' },
+          { id: 'horse1', text: 'ม้าสีขาว (วิ่งเร็วที่สุด - ออกตัวก่อน)' },
+          { id: 'horse2', text: 'ม้าสีดำ (วิ่งช้าที่สุด - ออกตัวหลังสุด)' }
+        ],
+        correctAnswer: ['horse1', 'horse3', 'horse2']
+      },
+
+      // --- STAGE 4: มหานครไซเบอร์พังค์ 2099 (Matching 3-in-1) ---
+      // This single match screen represents Q10, Q11, and Q12.
+      // Correct pairings: 1-B, 2-A, 3-C
+      {
+        id: 10,
+        stage: 4,
+        type: 'match',
+        questionText: 'จงจับคู่ปุ่มควบคุมของรถลอยฟ้าบนหน้าปัดขับขี่ (ด้านซ้าย) กับผลลัพธ์ของยานพาหนะที่จะเกิดขึ้น (ด้านขวา) ตามคู่มือระบบ:',
+        description: 'วิเคราะห์โครงสร้างเหตุและความสัมพันธ์ (Cause and Effect) เพื่อบังคับรถบินได้',
+        hint: 'ปุ่มสีฟ้าเป็นโหมดประหยัด (วิ่งนานขึ้นแต่ช้าลง) ปุ่มสีแดงคือเบรกฉุกเฉิน (หยุดรถทันที) ปุ่มสีเหลืองคือปีกบิน (ลอยขึ้นฟ้า)',
+        items: {
+          left: [
+            { id: 'L1', text: 'ปุ่มสีฟ้า (เปิดโหมดประหยัดพลังงาน)' },
+            { id: 'L2', text: 'ปุ่มสีแดง (เบรกฉุกเฉิน)' },
+            { id: 'L3', text: 'ปุ่มสีเหลือง (กางปีกบินสูง)' }
+          ],
+          right: [
+            { id: 'R1', text: 'B. ความเร็วลดลงแต่บินได้นานขึ้น' },
+            { id: 'R2', text: 'A. รถหยุดนิ่งทันที' },
+            { id: 'R3', text: 'C. รถลอยตัวขึ้นสู่ท้องฟ้า' }
+          ]
+        },
+        correctAnswer: {
+          'L1': 'R1',
+          'L2': 'R2',
+          'L3': 'R3'
+        }
+      },
+
+      // --- STAGE 5: สถานีอวกาศนอกกาแล็กซี (Path Selection) ---
+      {
+        id: 13,
+        stage: 5,
+        type: 'path',
+        questionText: 'ท่อส่งแกนพลังงานของยานแบ่งเส้นทางออกเป็น 2 ทิศทาง:<br>🧭 <strong class="text-rose-400">ถ้าเลี้ยวซ้าย:</strong> พลังงานจะวิ่งไปห้องควบคุมหลัก<br>🧭 <strong class="text-blue-400">ถ้าเลี้ยวขวา:</strong> พลังงานจะวิ่งไปห้องเครื่องยนต์หลัก<br><br>โจทย์: ถ้าหุ่นยนต์ขนส่งน้ำมัน <strong class="text-amber-300">เลี้ยวขวา</strong> พลังงานจะถูกส่งไปที่ห้องใด?',
+        description: 'ติดตามเส้นทางและหาผลลัพธ์สุดท้ายตามเงื่อนไขทางแยกที่กำหนด',
+        hint: 'ดูที่ทิศทางในคำถาม "เลี้ยวขวา" แล้วเทียบดูว่าในประโยคบอกว่าเลี้ยวขวาจะไปห้องไหน',
+        options: [
+          { id: 'A', text: 'ก. ห้องควบคุมหลัก' },
+          { id: 'B', text: 'ข. ห้องเครื่องยนต์หลัก' }
+        ],
+        correctAnswer: 'B'
+      },
+      {
+        id: 14,
+        stage: 5,
+        type: 'path',
+        questionText: 'แผงวงจรยานอวกาศมีเงื่อนไขเปิดปิดไฟดังนี้:<br>💡 **ถ้าสวิตช์ A เปิด ➡️ ไฟดวงที่ 1 จะติด**<br>💡 **ถ้าสวิตช์ B เปิด ➡️ ไฟดวงที่ 2 จะติด**<br><br>โจทย์: ถ้าระบบยานต้องการให้ <strong class="text-amber-300">"ไฟติดพร้อมกันทั้งสองดวง"</strong> จะต้องเปิดสวิตช์ตัวใดบ้าง?',
+        description: 'วิเคราะห์การทำงานร่วมกันของสวิตช์ไฟสองตัว',
+        hint: 'เพื่อให้ไฟดวงที่ 1 และดวงที่ 2 ติดพร้อมกัน เราต้องทำอย่างไรกับสวิตช์ A และสวิตช์ B?',
+        options: [
+          { id: 'A', text: 'ก. เปิดเฉพาะสวิตช์ A' },
+          { id: 'B', text: 'ข. เปิดเฉพาะสวิตช์ B' },
+          { id: 'C', text: 'ค. เปิดทั้งสวิตช์ A และ B' }
+        ],
+        correctAnswer: 'C'
+      },
+      {
+        id: 15,
+        stage: 5,
+        type: 'path',
+        questionText: 'เซนเซอร์เรดาร์อวกาศแจ้งเตือนสถานการณ์วิกฤต:<br>☄️ <strong class="text-rose-400">อุกกาบาตยักษ์จะพุ่งชนสถานีในอีก 10 วินาทีข้างหน้า</strong><br>🛡️ <strong class="text-blue-400">ระบบบาเรียป้องกันต้องใช้เวลาชาร์จพลังงาน 8 วินาทีก่อนจะกางออกสำเร็จ</strong><br><br>โจทย์: จงคาดการณ์ผลลัพธ์ว่า **"บาเรียป้องกันจะกางออกทันปกป้องสถานีอวกาศหรือไม่?"**',
+        description: 'คำนวณและเปรียบเทียบเวลาสองเหตุการณ์เพื่อทำนายผลลัพธ์สุดท้าย',
+        hint: 'ชาร์จเสร็จวินาทีที่ 8 อุกกาบาตมาวินาทีที่ 10 บาเรียเสร็จก่อนอุกกาบาตมาถึงใช่ไหมนะ?',
+        options: [
+          { id: 'A', text: 'ก. กางทันและสถานีปลอดภัยดี' },
+          { id: 'B', text: 'ข. กางไม่ทันและสถานีโดนชนเสียหาย' }
+        ],
+        correctAnswer: 'A'
+      }
+    ];
+
+    const stageDetails = {
+      1: {
+        title: 'ด่านที่ 1: ยุคหินฟลิ้นท์สโตน',
+        desc: 'ฝึกทำนายผลลัพธ์จากเงื่อนไข "ถ้า...แล้ว..." (If-Else) อย่างง่ายของเผ่าหินโบราณ',
+        bgClass: 'bg-stage-1',
+        badgeColor: 'bg-amber-950/60 text-amber-300 border-amber-500/30'
+      },
+      2: {
+        title: 'ด่านที่ 2: อาณาจักรอียิปต์โบราณ',
+        desc: 'คาดการณ์ผลลัพธ์จากรูปแบบสัญลักษณ์ (Pattern) และลำดับขั้นตอนของอียิปต์โบราณ',
+        bgClass: 'bg-stage-2',
+        badgeColor: 'bg-yellow-950/60 text-yellow-300 border-yellow-500/30'
+      },
+      3: {
+        title: 'ด่านที่ 3: ปราสาทอัศวินยุคกลาง',
+        desc: 'เรียงลำดับขั้นตอนและแก้ปัญหาเชิงกลไกเพื่อช่วยเหลือกองทัพอัศวินแห่งอาณาจักร',
+        bgClass: 'bg-stage-3',
+        badgeColor: 'bg-rose-950/60 text-rose-300 border-rose-500/30'
+      },
+      4: {
+        title: 'ด่านที่ 4: มหานครไซเบอร์พังค์ 2099',
+        desc: 'จับคู่เงื่อนไขเหตุและผลลัพธ์ (Cause and Effect) เพื่อซ่อมบำรุงระบบยานพาหนะลอยฟ้าแห่งอนาคต',
+        bgClass: 'bg-stage-4',
+        badgeColor: 'bg-purple-950/60 text-purple-300 border-purple-500/30'
+      },
+      5: {
+        title: 'ด่านที่ 5: สถานีอวกาศนอกกาแล็กซี',
+        desc: 'ทำนายทิศทางระบบพลังงานและประเมินเวลาของบาเรียเพื่อนำเฟืองมิติชิ้นสุดท้ายกลับมา',
+        bgClass: 'bg-stage-5',
+        badgeColor: 'bg-emerald-950/60 text-emerald-300 border-emerald-500/30'
+      }
+    };
+
+    // Global Game State
+    const gameState = {
+      playerName: '',
+      playerClass: '',
+      currentQuestionIndex: 0,
+      score: 0,
+      stageScores: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+      stageStars: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+      totalPoints: 0,
+      triggeredMilestones: [],
+      doubleScoreActive: false,
+      usedCardsInSession: []
+    };
+
+    // Stage tracking variables
+    let currentStageNum = 1;
+
+    // Interactive state variables
+    let reorderSequence = [];
+    let matchSelection = { left: null, right: null };
+    let activeMatches = {};
+    let timerInterval = null;
+    let timeRemaining = 60;
+
+    // =========================================================================
+    // 5. SCREEN CONTROL & NAVIGATION
+    // =========================================================================
+    function changeScreen(screenId) {
+      sfx.playClick();
+      
+      // Hide all screens
+      ['screen-start', 'screen-register', 'screen-rules', 'screen-stage-transition', 'screen-gameplay', 'screen-end'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+
+      // Show requested screen
+      const targetScreen = document.getElementById(screenId);
+      targetScreen.classList.remove('hidden');
+      
+      // Manage BGM transition depending on screen
+      if (screenId === 'screen-start' || screenId === 'screen-register' || screenId === 'screen-rules') {
+        bgm.play('main');
+      } else if (screenId === 'screen-end') {
+        bgm.play('main');
+      }
+
+      // Adjust background overlay opacity based on screen (Make transition screen & start screen background bright and clear)
+      const bgOverlay = document.getElementById('bg-overlay');
+      if (bgOverlay) {
+        if (screenId === 'screen-stage-transition' || screenId === 'screen-start') {
+          bgOverlay.className = 'absolute inset-0 bg-slate-950/20 z-0 pointer-events-none transition-all duration-500';
+        } else {
+          bgOverlay.className = 'absolute inset-0 bg-slate-950/60 z-0 pointer-events-none transition-all duration-500';
+        }
+      }
+
+      // Show/hide floating special card button
+      const floatingCard = document.getElementById('floating-card-trigger');
+      if (floatingCard) {
+        if (screenId === 'screen-gameplay') {
+          floatingCard.classList.remove('hidden');
+        } else {
+          floatingCard.classList.add('hidden');
+        }
+      }
+
+      const topStats = document.getElementById('top-stats');
+      if (screenId === 'screen-gameplay' || screenId === 'screen-end') {
+        if (topStats) topStats.classList.remove('hidden');
+      } else {
+        if (topStats) topStats.classList.add('hidden');
+      }
+
+      if (screenId === 'screen-end') {
+        renderEndScreen();
+      }
+    }
+
+    function checkActiveSession() {
+      const session = localStorage.getItem('time_travelers_active_session');
+      if (session) {
+        showResumeModal();
+      } else {
+        changeScreen('screen-register');
+      }
+    }
+
+    function showResumeModal() {
+      document.getElementById('modal-resume').classList.remove('hidden');
+    }
+
+    function confirmResume(resume) {
+      document.getElementById('modal-resume').classList.add('hidden');
+      if (resume) {
+        const session = JSON.parse(localStorage.getItem('time_travelers_active_session'));
+        Object.assign(gameState, session);
+        
+        const displayNameEl = document.getElementById('display-name');
+        if (displayNameEl) displayNameEl.textContent = gameState.playerName;
+        
+        loadQuestion(gameState.currentQuestionIndex);
+        changeScreen('screen-gameplay');
+      } else {
+        localStorage.removeItem('time_travelers_active_session');
+        changeScreen('screen-register');
+      }
+    }
+
+    function handleRegistration(e) {
+      if (e) e.preventDefault();
+      try {
+        const nameInput = document.getElementById('student-name').value.trim();
+        const classInput = document.getElementById('student-class').value.trim();
+
+        if (!nameInput || !classInput) {
+          alert('กรุณากรอกข้อมูลให้ครบถ้วนก่อนเริ่มเกม!');
+          return;
+        }
+
+        // ตรวจสอบชื่อซ้ำในระบบจัดอันดับ (Leaderboard Cache) พร้อมระบบป้องกันความผิดพลาดกรณีข้อมูลว่าง
+        const cachedLeaderboard = JSON.parse(localStorage.getItem('time_travelers_leaderboard')) || [];
+        const isDuplicate = cachedLeaderboard.some(player => {
+          if (!player || !player.name) return false;
+          const playerNameStr = String(player.name).trim();
+          return playerNameStr.replace(/\s+/g, '').toLowerCase() === nameInput.replace(/\s+/g, '').toLowerCase();
+        });
+
+        if (isDuplicate) {
+          alert('ชื่อผู้เล่นนี้ถูกใช้งานไปแล้วในระบบจัดอันดับ! โปรดใช้ชื่ออื่น หรือระบุนามสกุล/เลขที่เพิ่มเติมเพื่อป้องกันการซ้ำกับเพื่อนครับ');
+          return;
+        }
+
+        gameState.playerName = nameInput;
+        gameState.playerClass = classInput;
+        
+        const displayNameEl = document.getElementById('display-name');
+        if (displayNameEl) {
+          displayNameEl.textContent = nameInput;
+        }
+        
+        changeScreen('screen-rules');
+      } catch (err) {
+        console.error("Registration error:", err);
+        alert("เกิดข้อผิดพลาดในการลงทะเบียน: " + err.message);
+      }
+    }
+
+     function startGame() {
+      gameState.currentQuestionIndex = 0;
+      gameState.score = 0;
+      gameState.stageScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      gameState.stageStars = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      gameState.totalPoints = 0;
+      gameState.triggeredMilestones = [];
+      gameState.doubleScoreActive = false;
+      gameState.usedCardsInSession = [];
+      usedCards = [];
+      
+      showStageTransition(1);
+    }
+
+    // New Stage Transition Screen Trigger
+    function showStageTransition(stageNum) {
+      currentStageNum = stageNum;
+      const details = stageDetails[stageNum];
+      
+      // Change background image of body
+      const body = document.getElementById('game-body');
+      body.className = `game-bg-active text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden font-sans relative select-none ${details.bgClass}`;
+
+      // Update transition info
+      document.getElementById('transition-stage-label').textContent = `STAGE ${stageNum}`;
+      document.getElementById('transition-stage-title').textContent = details.title;
+      document.getElementById('transition-stage-desc').textContent = details.desc;
+
+      const btnText = document.getElementById('btn-transition-text');
+      if (btnText) {
+        if (stageNum === 1) {
+          btnText.textContent = "เริ่มเดินทาง";
+        } else {
+          btnText.textContent = "เดินทางไปยังด่านต่อไป";
+        }
+      }
+
+      // Auto-save progress on stage transition
+      if (stageNum > 1) {
+        const totalStars = Object.values(gameState.stageStars).reduce((a, b) => a + b, 0);
+        saveDataToGoogleSheet(gameState.playerName, gameState.playerClass, gameState.score, totalStars);
+      }
+
+      // Play stage-specific BGM automatically
+      bgm.play('stage' + stageNum);
+
+      changeScreen('screen-stage-transition');
+    }
+
+    function enterStageFromTransition() {
+      // Set question index according to stage start (Stage 1 = 0, Stage 2 = 3, Stage 3 = 6, Stage 4 = 9, Stage 5 = 10 (Wait, Stage 5 is 10 because Stage 4 is a single Q10 matching screen that covers Q10-12!))
+      let startQIndex = 0;
+      if (currentStageNum === 2) startQIndex = 3;
+      else if (currentStageNum === 3) startQIndex = 6;
+      else if (currentStageNum === 4) startQIndex = 9; // matching covers Q10, Q11, Q12
+      else if (currentStageNum === 5) startQIndex = 10; // Q13, Q14, Q15
+
+      gameState.currentQuestionIndex = startQIndex;
+      
+      updateGlobalStatus();
+      loadQuestion(startQIndex);
+      changeScreen('screen-gameplay');
+    }
+
+    function resetGame() {
+      gameState.currentQuestionIndex = 0;
+      gameState.score = 0;
+      gameState.stageScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      gameState.stageStars = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      gameState.totalPoints = 0;
+      gameState.triggeredMilestones = [];
+      gameState.doubleScoreActive = false;
+      gameState.usedCardsInSession = [];
+      usedCards = [];
+      
+      document.getElementById('student-name').value = '';
+      document.getElementById('student-class').value = '';
+      
+      // Play main menu BGM
+      bgm.play('main');
+
+      // Reset background to main
+      const body = document.getElementById('game-body');
+      body.className = `game-bg-active bg-main text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden font-sans relative select-none`;
+
+      changeScreen('screen-start');
+    }
+
+    // =========================================================================
+    // 6. RENDER SIDEBAR THUMBNAILS
+    // =========================================================================
+    function renderSidebarThumbnails() {
+      const container = document.getElementById('slides-list');
+      container.innerHTML = '';
+
+      // Set index mapping (because Q10-12 is merged into 1 screen, we only render 11 screens total)
+      // Map screen index to question lists:
+      // Index 0,1,2 (Stage 1)
+      // Index 3,4,5 (Stage 2)
+      // Index 6,7,8 (Stage 3)
+      // Index 9 (Stage 4 - covers 3 questions)
+      // Index 10,11,12 (Stage 5 - Q13,14,15)
+      
+      const slideIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+      
+      slideIndices.forEach((qIdx, displayIdx) => {
+        const q = questions[qIdx];
+        const div = document.createElement('button');
+        div.type = 'button';
+        div.id = `slide-thumb-${qIdx}`;
+        div.disabled = qIdx > gameState.currentQuestionIndex;
+        
+        let stateClass = 'bg-slate-900/60 border-slate-800 opacity-40 cursor-not-allowed';
+        let statusIcon = '<i class="fa-solid fa-lock text-slate-600 text-[10px]"></i>';
+        
+        if (qIdx === gameState.currentQuestionIndex) {
+          stateClass = 'bg-blue-950/70 border-blue-500 shadow-neon-blue font-bold scale-102 z-10';
+          statusIcon = '<i class="fa-solid fa-play text-blue-400 text-[10px] animate-pulse"></i>';
+        } else if (qIdx < gameState.currentQuestionIndex) {
+          stateClass = 'bg-slate-900/40 border-slate-800/80 hover:bg-slate-900/60';
+          statusIcon = '<i class="fa-solid fa-circle-check text-emerald-400 text-[10px]"></i>';
+        }
+
+        div.className = `w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all duration-200 ${stateClass}`;
+        
+        let labelText = `เฟืองที่ ${displayIdx + 1}`;
+        if (qIdx === 9) {
+          labelText = `เฟืองที่ 10-12 (ท้าทาย)`;
+        } else if (qIdx > 9) {
+          labelText = `เฟืองที่ ${qIdx + 3}`; // shift display indices to map 1 to 15
+        }
+
+        const textSnippet = q.questionText.replace(/<[^>]*>/g, '').substring(0, 18) + '...';
+
+        div.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono font-bold text-slate-500 w-4">${displayIdx + 1}</span>
+            <div class="flex flex-col">
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">${labelText}</span>
+              <span class="text-[11px] text-slate-300 font-medium truncate max-w-[120px] lg:max-w-[150px]">${textSnippet}</span>
+            </div>
+          </div>
+          <div class="flex-shrink-0 ml-2">${statusIcon}</div>
+        `;
+
+        if (qIdx <= gameState.currentQuestionIndex) {
+          div.onclick = () => {
+            sfx.playClick();
+            gameState.currentQuestionIndex = qIdx;
+            loadQuestion(qIdx);
+          };
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    // =========================================================================
+    // 7. GAMEPLAY WORKSPACE LOADING
+    // =========================================================================
+    function loadQuestion(index) {
+      const q = questions[index];
+      const stage = q.stage;
+      
+      const details = stageDetails[stage];
+      const badge = document.getElementById('stage-badge');
+      badge.textContent = `ด่านที่ ${stage} / 5`;
+      badge.className = `px-3 py-1 text-xs font-bold rounded-full ${details.badgeColor}`;
+      
+      // Update background of body to current stage
+      const body = document.getElementById('game-body');
+      body.className = `game-bg-active text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden font-sans relative select-none ${details.bgClass}`;
+
+      let dispNum = index + 1;
+      if (index === 9) {
+        dispNum = "10 - 12";
+      } else if (index > 9) {
+        dispNum = index + 3;
+      }
+      document.getElementById('slide-info-pill').textContent = `เฟืองมิติชิ้นที่ ${dispNum}`;
+      
+      const progressPercent = Math.round((index / 13) * 100);
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+      document.getElementById('progress-text').textContent = `${progressPercent}%`;
+
+      document.getElementById('question-number').textContent = dispNum;
+      document.getElementById('question-text').innerHTML = q.questionText;
+
+      reorderSequence = [];
+      matchSelection = { left: null, right: null };
+      activeMatches = {};
+
+      const workspace = document.getElementById('question-workspace');
+      workspace.innerHTML = '';
+      
+      const oldCanvas = document.getElementById('matching-canvas');
+      if (oldCanvas) oldCanvas.remove();
+
+      const btnSubmit = document.getElementById('btn-submit');
+      btnSubmit.disabled = false;
+
+      switch (q.type) {
+        case 'mcq':
+          renderMCQ(q, workspace);
+          break;
+        case 'text':
+          renderTextInput(q, workspace);
+          break;
+        case 'reorder':
+          renderReorder(q, workspace);
+          break;
+        case 'keymatch':
+          renderKeyMatch(q, workspace);
+          break;
+        case 'match':
+          renderMatching(q, workspace);
+          break;
+        case 'path':
+          renderPathSelection(q, workspace);
+          break;
+      }
+
+      renderSidebarThumbnails();
+      startTimer();
+
+      // Save active session to localStorage for auto-resume
+      localStorage.setItem('time_travelers_active_session', JSON.stringify(gameState));
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timeRemaining = 60;
+      updateTimerUI();
+
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerUI();
+
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          handleTimeOut();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const secondsEl = document.getElementById('timer-seconds');
+      const badgeEl = document.getElementById('timer-badge');
+      if (!secondsEl || !badgeEl) return;
+
+      secondsEl.textContent = timeRemaining;
+
+      if (timeRemaining <= 15) {
+        badgeEl.className = 'flex items-center space-x-1.5 bg-rose-950 text-rose-400 px-2.5 py-1 rounded-full border border-rose-500 animate-pulse text-xs font-bold';
+      } else {
+        badgeEl.className = 'flex items-center space-x-1.5 bg-slate-950/60 text-slate-300 px-2.5 py-1 rounded-full border border-slate-800 text-xs font-bold';
+      }
+    }
+
+    function handleTimeOut() {
+      sfx.playIncorrect();
+      
+      const overlay = document.getElementById('feedback-overlay');
+      const icon = document.getElementById('feedback-icon');
+      const title = document.getElementById('feedback-title');
+      const message = document.getElementById('feedback-message');
+      const btnSubmit = document.getElementById('btn-submit');
+
+      if (btnSubmit) btnSubmit.disabled = true;
+
+      overlay.classList.remove('hidden');
+      
+      icon.className = 'w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl bg-rose-950/80 text-rose-400 border border-rose-500/30 shadow-md animate__animated animate__shakeX';
+      icon.innerHTML = '<i class="fa-solid fa-hourglass-end"></i>';
+      title.className = 'text-2xl font-bold text-rose-400';
+      title.textContent = 'หมดเวลา! (Time Out)';
+      
+      const q = questions[gameState.currentQuestionIndex];
+      let explain = '';
+      if (q.type === 'mcq') {
+        const correctOpt = q.options.find(o => o.id === q.correctAnswer);
+        explain = `คำตอบที่ถูกต้องคือ: ${correctOpt.text}`;
+      } else if (q.type === 'text') {
+        explain = `คำตอบที่ถูกต้องคือ: ${q.correctAnswer[0]}`;
+      } else if (q.type === 'reorder') {
+        const correctTexts = q.correctAnswer.map(id => {
+          return q.items.find(item => item.id === id).text.replace(/^\d+\.\s*/, '');
+        });
+        explain = `ขั้นตอนที่ถูกคือ: ${correctTexts.join(' ➡️ ')}`;
+      } else if (q.type === 'keymatch') {
+        explain = 'สามเหลี่ยมคู่กับแม่กุญแจ 3 เหลี่ยม, สี่เหลี่ยมคู่กับแม่กุญแจ 4 เหลี่ยม';
+      } else if (q.type === 'match') {
+        explain = 'ปุ่มฟ้าคู่กับ B, ปุ่มแดงคู่กับ A, ปุ่มเหลืองคู่กับ C';
+      } else if (q.type === 'path') {
+        explain = `คำตอบที่ถูกคือ: ${q.correctAnswer === 'A' ? 'ก' : 'ข'}`;
+      }
+
+      message.innerHTML = `คุณใช้เวลาเกิน 1 นาทีในข้อนี้ ระบบมิติเวลาจึงทำการปิดกั้นชั่วคราว<br><span class="text-xs text-rose-400 font-bold mt-2 block">${explain}</span>`;
+
+      // Update stage score (it counts as incorrect, so 0 score for this question)
+      const stage = q.stage;
+      if (q.type === 'match' && stage === 4) {
+        gameState.stageScores[4] = 0;
+      }
+    }
+
+    function showHint() {
+      const q = questions[gameState.currentQuestionIndex];
+      showToast(`💡 คำใบ้: ${q.hint}`, 20000);
+    }
+
+    function updateGlobalStatus() {
+      const scoreEl = document.getElementById('display-score');
+      const pointsEl = document.getElementById('display-points');
+      if (scoreEl) scoreEl.textContent = gameState.score;
+      if (pointsEl) pointsEl.textContent = gameState.totalPoints;
+      
+      const starContainer = document.getElementById('stage-stars-preview');
+      if (starContainer) {
+        starContainer.innerHTML = '';
+        for (let s = 1; s <= 5; s++) {
+          const starsCount = gameState.stageStars[s];
+          const span = document.createElement('span');
+          if (starsCount > 0) {
+            span.className = 'text-amber-400 drop-shadow-sm text-xs animate__animated animate__bounceIn';
+            span.innerHTML = '<i class="fa-solid fa-star"></i>'.repeat(starsCount);
+          } else {
+            span.className = 'text-slate-600 text-xs';
+            span.innerHTML = '<i class="fa-regular fa-star"></i>';
+          }
+          starContainer.appendChild(span);
+        }
+      }
+      checkMilestones();
+    }
+
+    // =========================================================================
+    // 8. CUSTOM WORKSPACE RENDERERS
+    // =========================================================================
+    
+    // --- MCQ ---
+    function renderMCQ(q, container) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'grid grid-cols-1 gap-3.5 w-full max-w-md';
+      
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => selectMCQOption(btn, opt.id);
+        btn.className = 'mcq-option w-full p-4 text-left bg-slate-950/40 border border-slate-800 hover:border-blue-500 rounded-2xl transition-all duration-200 flex items-center justify-between hover:bg-blue-950/15 hover:shadow-neon-blue focus:outline-none';
+        btn.dataset.id = opt.id;
+        
+        btn.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <span class="w-7 h-7 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center font-bold text-slate-400 text-xs">${opt.id}</span>
+            <span class="text-base font-semibold text-slate-200">${opt.text}</span>
+          </div>
+          <div class="option-check-icon text-transparent"><i class="fa-solid fa-circle-check text-blue-400"></i></div>
+        `;
+        wrapper.appendChild(btn);
+      });
+
+      container.appendChild(wrapper);
+    }
+
+    let selectedMCQId = null;
+    function selectMCQOption(selectedBtn, optId) {
+      sfx.playClick();
+      selectedMCQId = optId;
+      
+      document.querySelectorAll('.mcq-option').forEach(btn => {
+        btn.classList.remove('border-blue-500', 'bg-blue-950/20', 'shadow-neon-blue');
+        btn.querySelector('.option-check-icon').classList.add('text-transparent');
+      });
+
+      selectedBtn.classList.add('border-blue-500', 'bg-blue-950/20', 'shadow-neon-blue');
+      selectedBtn.querySelector('.option-check-icon').classList.remove('text-transparent');
+    }
+
+    // --- TEXT INPUT ---
+    function renderTextInput(q, container) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'w-full max-w-md space-y-4';
+
+      wrapper.innerHTML = `
+        <div class="relative">
+          <input type="text" id="text-answer-input" placeholder="${q.placeholder || 'พิมพ์คำตอบที่นี่...'}"
+            class="w-full px-6 py-4 bg-slate-950/85 border-2 border-slate-800 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 rounded-2xl text-center text-lg font-bold tracking-wide placeholder-slate-600 focus:outline-none text-white transition-all duration-300">
+        </div>
+      `;
+
+      container.appendChild(wrapper);
+
+      setTimeout(() => {
+        const input = document.getElementById('text-answer-input');
+        if (input) {
+          input.focus();
+          input.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+              document.getElementById('btn-submit').click();
+            }
+          });
+        }
+      }, 100);
+    }
+
+    // --- REORDER ---
+    function renderReorder(q, container) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'w-full space-y-6';
+
+      const shuffledItems = [...q.items].sort(() => Math.random() - 0.5);
+
+      wrapper.innerHTML = `
+        <div class="space-y-2">
+          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">จัดเรียงขั้นตอนลำดับ (เรียงจากซ้าย ➡️ ขวา):</div>
+          <div id="reorder-sequence-container" class="min-h-[100px] w-full bg-slate-950/60 rounded-2xl border-2 border-dashed border-slate-800 p-4 flex flex-wrap gap-2.5 justify-center items-center">
+            <span class="text-xs text-slate-500" id="sequence-placeholder">คลิกเลือกปุ่มคำสั่งด้านล่างเพื่อจัดเรียง...</span>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">คำสั่งที่สลับไว้:</div>
+          <div id="reorder-pool-container" class="flex flex-wrap gap-2.5 justify-center">
+            <!-- Shuffled items go here -->
+          </div>
+        </div>
+      `;
+
+      container.appendChild(wrapper);
+
+      const poolContainer = document.getElementById('reorder-pool-container');
+      shuffledItems.forEach(item => {
+        const div = document.createElement('div');
+        div.id = `pool-item-${item.id}`;
+        div.className = 'px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-blue-950/10 text-sm font-semibold text-slate-300 transition-all active:scale-95';
+        div.textContent = item.text.replace(/^\d+\.\s*/, '');
+        div.onclick = () => addToSequence(item);
+        poolContainer.appendChild(div);
+      });
+    }
+
+    function addToSequence(item) {
+      sfx.playClick();
+      
+      // Check if already in sequence
+      if (reorderSequence.some(x => x.id === item.id)) return;
+
+      reorderSequence.push(item);
+
+      // Remove from pool UI
+      const poolItem = document.getElementById(`pool-item-${item.id}`);
+      if (poolItem) poolItem.classList.add('hidden');
+
+      // Update sequence container
+      renderReorderSequence();
+    }
+
+    function removeFromSequence(item) {
+      sfx.playClick();
+
+      reorderSequence = reorderSequence.filter(x => x.id !== item.id);
+
+      // Show in pool UI again
+      const poolItem = document.getElementById(`pool-item-${item.id}`);
+      if (poolItem) poolItem.classList.remove('hidden');
+
+      // Update sequence container
+      renderReorderSequence();
+    }
+
+    function renderReorderSequence() {
+      const container = document.getElementById('reorder-sequence-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (reorderSequence.length === 0) {
+        container.innerHTML = '<span class="text-xs text-slate-500" id="sequence-placeholder">คลิกเลือกปุ่มคำสั่งด้านล่างเพื่อจัดเรียง...</span>';
+        return;
+      }
+
+      reorderSequence.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'px-4 py-3 bg-blue-950/60 border border-blue-500 rounded-xl cursor-pointer hover:border-rose-500 hover:bg-rose-950/10 text-sm font-semibold text-blue-300 transition-all flex items-center space-x-2 animate__animated animate__zoomIn';
+        div.innerHTML = `
+          <span class="bg-blue-900 text-blue-200 w-5 h-5 rounded-full flex items-center justify-center font-mono text-[10px]">${index + 1}</span>
+          <span>${item.text.replace(/^\d+\.\s*/, '')}</span>
+          <i class="fa-solid fa-xmark text-[10px] text-slate-500 hover:text-rose-400 ml-1"></i>
+        `;
+        div.onclick = () => removeFromSequence(item);
+        container.appendChild(div);
+      });
+    }
+
+    // --- GEOMETRIC KEY DRAG & DROP / CLICK MATCH (Stage 3 Q8) ---
+    function renderKeyMatch(q, container) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'w-full space-y-6';
+
+      wrapper.innerHTML = `
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div class="space-y-2">
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center justify-center space-y-2">
+              <span class="text-sm font-bold text-purple-300">แม่กุญแจ 3 เหลี่ยม</span>
+              <div class="w-10 h-10 border-2 border-dashed border-purple-500/40 rounded-full flex items-center justify-center" id="slot-lock3">
+                <i class="fa-solid fa-lock text-slate-700 text-sm"></i>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center justify-center space-y-2">
+              <span class="text-sm font-bold text-blue-300">แม่กุญแจ 4 เหลี่ยม</span>
+              <div class="w-10 h-10 border-2 border-dashed border-blue-500/40 rounded-full flex items-center justify-center" id="slot-lock4">
+                <i class="fa-solid fa-lock text-slate-700 text-sm"></i>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center justify-center space-y-2">
+              <span class="text-sm font-bold text-emerald-300">แม่กุญแจ 5 เหลี่ยม</span>
+              <div class="w-10 h-10 border-2 border-dashed border-emerald-500/40 rounded-full flex items-center justify-center" id="slot-lock5">
+                <i class="fa-solid fa-lock text-slate-700 text-sm"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center">คลิกเลือกกุญแจด้านล่างเพื่อนำไปจับคู่:</div>
+          <div class="flex justify-center gap-4" id="key-pool">
+            <button type="button" id="key-item-key3" onclick="selectKey('key3')" class="key-btn px-4 py-3 bg-slate-900 border border-slate-800 rounded-2xl text-sm font-bold text-slate-200 hover:border-purple-500 transition-all flex flex-col items-center space-y-1">
+              <span>🔑 กุญแจ 3 เหลี่ยม</span>
+            </button>
+            <button type="button" id="key-item-key4" onclick="selectKey('key4')" class="key-btn px-4 py-3 bg-slate-900 border border-slate-800 rounded-2xl text-sm font-bold text-slate-200 hover:border-blue-500 transition-all flex flex-col items-center space-y-1">
+              <span>🔑 กุญแจ 4 เหลี่ยม</span>
+            </button>
+            <button type="button" id="key-item-key5" onclick="selectKey('key5')" class="key-btn px-4 py-3 bg-slate-900 border border-slate-800 rounded-2xl text-sm font-bold text-slate-200 hover:border-emerald-500 transition-all flex flex-col items-center space-y-1">
+              <span>🔑 กุญแจ 5 เหลี่ยม</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(wrapper);
+    }
+
+    let selectedKeyId = null;
+    function selectKey(keyId) {
+      sfx.playClick();
+      selectedKeyId = keyId;
+
+      document.querySelectorAll('.key-btn').forEach(btn => {
+        btn.classList.remove('border-blue-500', 'bg-blue-950/20');
+      });
+      document.getElementById(`key-item-${keyId}`).classList.add('border-blue-500', 'bg-blue-950/20');
+
+      showToast(`เลือก กุญแจ ${keyId === 'key3' ? '3' : keyId === 'key4' ? '4' : '5'} เหลี่ยม แล้ว! คลิกที่แม่กุญแจด้านบนเพื่อจับคู่`);
+
+      // Bind click events on lock slots dynamically
+      document.getElementById('slot-lock3').onclick = () => pairKeyWithLock('lock3');
+      document.getElementById('slot-lock4').onclick = () => pairKeyWithLock('lock4');
+      document.getElementById('slot-lock5').onclick = () => pairKeyWithLock('lock5');
+    }
+
+    function pairKeyWithLock(lockId) {
+      if (!selectedKeyId) {
+        alert('กรุณาคลิกเลือกกุญแจด้านล่างก่อนจับคู่!');
+        return;
+      }
+
+      sfx.playClick();
+      
+      // Clean previous pairing of this key if exists
+      for (let k in activeMatches) {
+        if (activeMatches[k] === lockId) {
+          delete activeMatches[k];
+        }
+      }
+
+      activeMatches[selectedKeyId] = lockId;
+
+      // Update UI in slots
+      document.getElementById('slot-lock3').innerHTML = '<i class="fa-solid fa-lock text-slate-700 text-sm"></i>';
+      document.getElementById('slot-lock4').innerHTML = '<i class="fa-solid fa-lock text-slate-700 text-sm"></i>';
+      document.getElementById('slot-lock5').innerHTML = '<i class="fa-solid fa-lock text-slate-700 text-sm"></i>';
+
+      for (let k in activeMatches) {
+        const l = activeMatches[k];
+        const label = k === 'key3' ? '🔑 3 เหลี่ยม' : k === 'key4' ? '🔑 4 เหลี่ยม' : '🔑 5 เหลี่ยม';
+        document.getElementById(`slot-${l}`).innerHTML = `<span class="text-xs bg-emerald-500 text-slate-950 font-bold py-1 px-2 rounded-lg">${label}</span>`;
+      }
+
+      showToast('จับคู่สำเร็จ!');
+      
+      // Reset select styling
+      document.querySelectorAll('.key-btn').forEach(btn => {
+        btn.classList.remove('border-blue-500', 'bg-blue-950/20');
+      });
+      selectedKeyId = null;
+    }
+
+    // --- MATCHING ---
+    function renderMatching(q, container) {
+      const leftItems = [...q.items.left].sort(() => Math.random() - 0.5);
+      const rightItems = [...q.items.right].sort(() => Math.random() - 0.5);
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'w-full relative grid grid-cols-2 gap-8 md:gap-16 z-20';
+
+      let leftColHTML = '<div class="flex flex-col gap-3.5">';
+      leftItems.forEach(item => {
+        leftColHTML += `
+          <button type="button" id="match-left-${item.id}" onclick="selectMatchNode('left', '${item.id}')"
+            class="match-node-left p-3.5 text-left bg-slate-900/60 border border-slate-800 hover:border-purple-500 rounded-xl text-sm font-semibold text-slate-300 flex justify-between items-center focus:outline-none shadow-sm">
+            <span>${item.text}</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 border border-slate-600 inline-block ml-2 flex-shrink-0 node-dot"></span>
+          </button>
+        `;
+      });
+      leftColHTML += '</div>';
+
+      let rightColHTML = '<div class="flex flex-col gap-3.5">';
+      rightItems.forEach(item => {
+        rightColHTML += `
+          <button type="button" id="match-right-${item.id}" onclick="selectMatchNode('right', '${item.id}')"
+            class="match-node-right p-3.5 text-left bg-slate-900/60 border border-slate-800 hover:border-purple-500 rounded-xl text-sm font-semibold text-slate-300 flex justify-between items-center focus:outline-none shadow-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-700 border border-slate-600 inline-block mr-2 flex-shrink-0 node-dot"></span>
+            <span class="flex-grow text-right">${item.text}</span>
+          </button>
+        `;
+      });
+      rightColHTML += '</div>';
+
+      wrapper.innerHTML = leftColHTML + rightColHTML;
+      container.appendChild(wrapper);
+
+      const canvasEl = document.createElement('canvas');
+      canvasEl.id = 'matching-canvas';
+      container.appendChild(canvasEl);
+
+      setTimeout(() => {
+        fitCanvas();
+        window.addEventListener('resize', fitCanvas);
+      }, 50);
+    }
+
+    function fitCanvas() {
+      const c = document.getElementById('matching-canvas');
+      if (!c) return;
+      const rect = c.parentElement.getBoundingClientRect();
+      c.width = rect.width;
+      c.height = rect.height;
+      drawMatchLines();
+    }
+
+    function selectMatchNode(side, id) {
+      sfx.playClick();
+      
+      if (side === 'left') {
+        matchSelection.left = id;
+        document.querySelectorAll('.match-node-left').forEach(btn => {
+          btn.classList.remove('border-purple-500', 'bg-purple-950/20');
+        });
+        document.getElementById(`match-left-${id}`).classList.add('border-purple-500', 'bg-purple-950/20');
+      } else {
+        matchSelection.right = id;
+        document.querySelectorAll('.match-node-right').forEach(btn => {
+          btn.classList.remove('border-purple-500', 'bg-purple-950/20');
+        });
+        document.getElementById(`match-right-${id}`).classList.add('border-purple-500', 'bg-purple-950/20');
+      }
+
+      if (matchSelection.left && matchSelection.right) {
+        for (let leftKey in activeMatches) {
+          if (activeMatches[leftKey] === matchSelection.right) {
+            delete activeMatches[leftKey];
+          }
+        }
+
+        activeMatches[matchSelection.left] = matchSelection.right;
+
+        document.querySelectorAll('.match-node-left, .match-node-right').forEach(btn => {
+          btn.classList.remove('border-purple-500', 'bg-purple-950/20');
+        });
+
+        updateConnectedNodeStyles();
+        matchSelection = { left: null, right: null };
+        drawMatchLines();
+      }
+    }
+
+    function updateConnectedNodeStyles() {
+      document.querySelectorAll('.match-node-left, .match-node-right').forEach(btn => {
+        btn.classList.remove('border-blue-500', 'bg-blue-950/20');
+        btn.querySelector('.node-dot').classList.remove('bg-blue-400', 'border-blue-500');
+        btn.querySelector('.node-dot').classList.add('bg-slate-700');
+      });
+
+      for (let leftId in activeMatches) {
+        const rightId = activeMatches[leftId];
+        const lNode = document.getElementById(`match-left-${leftId}`);
+        const rNode = document.getElementById(`match-right-${rightId}`);
+        
+        if (lNode && rNode) {
+          lNode.classList.add('border-blue-500', 'bg-blue-950/20');
+          lNode.querySelector('.node-dot').classList.remove('bg-slate-700');
+          lNode.querySelector('.node-dot').classList.add('bg-blue-400', 'border-blue-500');
+
+          rNode.classList.add('border-blue-500', 'bg-blue-950/20');
+          rNode.querySelector('.node-dot').classList.remove('bg-slate-700');
+          rNode.querySelector('.node-dot').classList.add('bg-blue-400', 'border-blue-500');
+        }
+      }
+    }
+
+    function drawMatchLines() {
+      const c = document.getElementById('matching-canvas');
+      if (!c) return;
+      const cvCtx = c.getContext('2d');
+      cvCtx.clearRect(0, 0, c.width, c.height);
+
+      const parentRect = c.parentElement.getBoundingClientRect();
+
+      for (let leftId in activeMatches) {
+        const rightId = activeMatches[leftId];
+        const lBtn = document.getElementById(`match-left-${leftId}`);
+        const rBtn = document.getElementById(`match-right-${rightId}`);
+        
+        if (lBtn && rBtn) {
+          const lDot = lBtn.querySelector('.node-dot').getBoundingClientRect();
+          const rDot = rBtn.querySelector('.node-dot').getBoundingClientRect();
+
+          const startX = lDot.left + lDot.width / 2 - parentRect.left;
+          const startY = lDot.top + lDot.height / 2 - parentRect.top;
+          const endX = rDot.left + rDot.width / 2 - parentRect.left;
+          const endY = rDot.top + rDot.height / 2 - parentRect.top;
+
+          cvCtx.beginPath();
+          cvCtx.moveTo(startX, startY);
+          cvCtx.lineTo(endX, endY);
+          
+          cvCtx.strokeStyle = '#3b82f6';
+          cvCtx.lineWidth = 3;
+          cvCtx.lineCap = 'round';
+          cvCtx.stroke();
+        }
+      }
+    }
+
+    // --- PATH SELECTION ---
+    function renderPathSelection(q, container) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'w-full space-y-6';
+
+      let optionsHTML = '';
+      q.options.forEach(opt => {
+        optionsHTML += `
+          <button type="button" onclick="selectPath('${opt.id}')" id="path-opt-${opt.id}"
+            class="path-btn w-full p-4 bg-slate-900/60 border border-slate-800 hover:border-purple-500 rounded-2xl transition-all hover:shadow-neon-purple flex items-center justify-between text-left focus:outline-none">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center text-purple-400"><i class="fa-solid fa-route text-xs"></i></span>
+              <span class="text-base font-semibold text-slate-200">${opt.text}</span>
+            </div>
+            <div class="path-check-icon text-transparent"><i class="fa-solid fa-circle-check text-purple-400"></i></div>
+          </button>
+        `;
+      });
+
+      wrapper.innerHTML = `
+        <div class="grid grid-cols-1 gap-3.5 max-w-md mx-auto w-full">
+          ${optionsHTML}
+        </div>
+      `;
+
+      container.appendChild(wrapper);
+    }
+
+    let selectedPathId = null;
+    function selectPath(optId) {
+      sfx.playClick();
+      selectedPathId = optId;
+
+      document.querySelectorAll('.path-btn').forEach(btn => {
+        btn.classList.remove('border-purple-500', 'bg-purple-950/20', 'shadow-neon-purple');
+        btn.querySelector('.path-check-icon').classList.add('text-transparent');
+      });
+
+      const selectedBtn = document.getElementById(`path-opt-${optId}`);
+      selectedBtn.classList.add('border-purple-500', 'bg-purple-950/20', 'shadow-neon-purple');
+      selectedBtn.querySelector('.path-check-icon').classList.remove('text-transparent');
+    }
+
+    // =========================================================================
+    // 9. ANSWER VERIFICATION & FEEDBACK
+    // =========================================================================
+    function checkAnswer() {
+      clearInterval(timerInterval);
+      const q = questions[gameState.currentQuestionIndex];
+      let isCorrect = false;
+
+      switch (q.type) {
+        case 'mcq':
+          if (!selectedMCQId) {
+            alert('กรุณาเลือกคำตอบอย่างน้อย 1 ตัวเลือก!');
+            return;
+          }
+          isCorrect = (selectedMCQId === q.correctAnswer);
+          selectedMCQId = null;
+          break;
+
+        case 'text':
+          const textInput = document.getElementById('text-answer-input');
+          if (!textInput) return;
+          const userVal = textInput.value.trim().toLowerCase();
+          if (!userVal) {
+            alert('กรุณากรอกคำตอบลงในช่องว่าง!');
+            return;
+          }
+          isCorrect = q.correctAnswer.some(ans => userVal === ans.toLowerCase());
+          break;
+
+        case 'reorder':
+          if (reorderSequence.length !== q.correctAnswer.length) {
+            alert('กรุณาจัดเรียงขั้นตอนลำดับให้ครบถ้วน!');
+            return;
+          }
+          const userOrder = reorderSequence.map(item => item.id);
+          isCorrect = userOrder.every((val, index) => val === q.correctAnswer[index]);
+          break;
+
+        case 'keymatch':
+          const matchKeys = Object.keys(q.correctAnswer);
+          if (Object.keys(activeMatches).length < matchKeys.length) {
+            alert('กรุณาจับคู่กุญแจให้ครบถ้วน!');
+            return;
+          }
+          isCorrect = true;
+          for (let k of matchKeys) {
+            if (activeMatches[k] !== q.correctAnswer[k]) {
+              isCorrect = false;
+              break;
+            }
+          }
+          break;
+
+        case 'match':
+          const keys = Object.keys(q.correctAnswer);
+          if (Object.keys(activeMatches).length < keys.length) {
+            alert('กรุณาจับคู่คำตอบให้ครบทุกคู่!');
+            return;
+          }
+          isCorrect = true;
+          for (let leftKey of keys) {
+            if (activeMatches[leftKey] !== q.correctAnswer[leftKey]) {
+              isCorrect = false;
+              break;
+            }
+          }
+          break;
+
+        case 'path':
+          if (!selectedPathId) {
+            alert('กรุณาเลือกเส้นทางการนำทาง!');
+            return;
+          }
+          isCorrect = (selectedPathId === q.correctAnswer);
+          selectedPathId = null;
+          break;
+      }
+
+      const stage = q.stage;
+      
+      // Stage 4 evaluates Q10, Q11, Q12 at once!
+      if (q.type === 'match' && stage === 4) {
+        let correctCount = 0;
+        const keys = Object.keys(q.correctAnswer);
+        keys.forEach(k => {
+          if (activeMatches[k] === q.correctAnswer[k]) {
+            correctCount++;
+          }
+        });
+        
+        gameState.score += correctCount;
+        gameState.stageScores[4] = correctCount;
+
+        // Add points
+        let matchPoints = Math.max(1, Math.round((timeRemaining / 60) * 10));
+        let pointsEarned = correctCount * matchPoints;
+        if (gameState.doubleScoreActive) {
+          pointsEarned = pointsEarned * 2;
+          gameState.doubleScoreActive = false;
+        }
+        gameState.totalPoints += pointsEarned;
+        
+        if (correctCount === 3) {
+          sfx.playCorrect();
+          showFeedback(true);
+          // Overwrite message to show points
+          document.getElementById('feedback-message').innerHTML = `ยินดีด้วย! คุณจับคู่ถูกต้องทั้งหมด<br><span class="text-sm font-bold text-yellow-400 mt-1 block">+${pointsEarned} คะแนนสะสม (ตอบไวมาก!)</span>`;
+        } else {
+          sfx.playIncorrect();
+          showFeedback(false);
+          // Overwrite message to show partial credit
+          document.getElementById('feedback-message').innerHTML = `คุณจับคู่ปุ่มควบคุมถูกต้องจำนวน ${correctCount} จาก 3 คู่<br><span class="text-xs text-rose-400 font-bold mt-2 block">เฉลยระบบ: ปุ่มฟ้าคู่กับ B, ปุ่มแดงคู่กับ A, ปุ่มเหลืองคู่กับ C</span><br><span class="text-sm font-bold text-yellow-400 mt-1 block">+${pointsEarned} คะแนนสะสม</span>`;
+        }
+      } else {
+        if (isCorrect) {
+          gameState.score += 1;
+          gameState.stageScores[stage] += 1;
+
+          // Add points
+          let matchPoints = Math.max(1, Math.round((timeRemaining / 60) * 10));
+          let pointsEarned = gameState.doubleScoreActive ? (matchPoints * 2) : matchPoints;
+          gameState.totalPoints += pointsEarned;
+          gameState.doubleScoreActive = false;
+
+          sfx.playCorrect();
+          showFeedback(true);
+          // Overwrite message to show points
+          document.getElementById('feedback-message').innerHTML = `ยินดีด้วย! คุณตอบถูกและกู้คืนเฟืองมิติได้สำเร็จ<br><span class="text-sm font-bold text-yellow-400 mt-1 block">+${pointsEarned} คะแนนสะสม (ตอบไวมาก!)</span>`;
+        } else {
+          sfx.playIncorrect();
+          showFeedback(false);
+        }
+      }
+
+      document.getElementById('btn-submit').disabled = true;
+    }
+
+    function showFeedback(isCorrect) {
+      const overlay = document.getElementById('feedback-overlay');
+      const icon = document.getElementById('feedback-icon');
+      const title = document.getElementById('feedback-title');
+      const message = document.getElementById('feedback-message');
+
+      overlay.classList.remove('hidden');
+      const q = questions[gameState.currentQuestionIndex];
+
+      if (isCorrect) {
+        icon.className = 'w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 shadow-md animate__animated animate__bounceIn';
+        icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+        title.className = 'text-2xl font-bold text-emerald-400';
+        title.textContent = 'ถูกต้องเก่งมาก! (Correct)';
+        message.textContent = 'ยอดเยี่ยม! คุณซ่อมแซมจุดนี้และกู้คืนเฟืองมิติได้สำเร็จ';
+        showToast('กู้คืนเฟืองมิติสำเร็จแล้ว!');
+      } else {
+        icon.className = 'w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl bg-rose-950/80 text-rose-400 border border-rose-500/30 shadow-md animate__animated animate__shakeX';
+        icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+        title.className = 'text-2xl font-bold text-rose-400';
+        title.textContent = 'คำตอบยังไม่ถูกต้อง (Incorrect)';
+        
+        let explain = '';
+        if (q.type === 'mcq') {
+          const correctOpt = q.options.find(o => o.id === q.correctAnswer);
+          explain = `คำตอบที่ถูกต้องคือ: ${correctOpt.text}`;
+        } else if (q.type === 'text') {
+          explain = `คำตอบที่ถูกต้องคือ: ${q.correctAnswer[0]}`;
+        } else if (q.type === 'reorder') {
+          const correctTexts = q.correctAnswer.map(id => {
+            return q.items.find(item => item.id === id).text.replace(/^\d+\.\s*/, '');
+          });
+          explain = `ขั้นตอนที่ถูกคือ: ${correctTexts.join(' ➡️ ')}`;
+        } else if (q.type === 'keymatch') {
+          explain = 'สามเหลี่ยมคู่กับแม่กุญแจ 3 เหลี่ยม, สี่เหลี่ยมคู่กับแม่กุญแจ 4 เหลี่ยม';
+        } else if (q.type === 'match') {
+          explain = 'ปุ่มฟ้าคู่กับ B, ปุ่มแดงคู่กับ A, ปุ่มเหลืองคู่กับ C';
+        } else if (q.type === 'path') {
+          explain = `คำตอบที่ถูกคือ: ${q.correctAnswer === 'A' ? 'ก' : 'ข'}`;
+        }
+
+        message.innerHTML = `ลองทบทวนดูอีกรอบนะ! สู้ๆ ในคำถามข้อต่อไปครับ<br><span class="text-xs text-rose-400 font-bold mt-2 block">${explain}</span>`;
+      }
+    }
+
+    function nextQuestion() {
+      sfx.playClick();
+      document.getElementById('feedback-overlay').classList.add('hidden');
+
+      const currentQ = questions[gameState.currentQuestionIndex];
+      const stage = currentQ.stage;
+
+      // Check if this is the end of the stage
+      let isEndOfStage = false;
+      if (stage === 1 && gameState.currentQuestionIndex === 2) isEndOfStage = true;
+      else if (stage === 2 && gameState.currentQuestionIndex === 5) isEndOfStage = true;
+      else if (stage === 3 && gameState.currentQuestionIndex === 8) isEndOfStage = true;
+      else if (stage === 4 && gameState.currentQuestionIndex === 9) isEndOfStage = true; // Stage 4 ends at index 9
+      else if (stage === 5 && gameState.currentQuestionIndex === 12) isEndOfStage = true;
+
+      if (isEndOfStage) {
+        // Calculate stars
+        const correctInStage = gameState.stageScores[stage];
+        let stars = 0;
+        if (stage === 4) {
+          // matching has 3 pairs
+          if (correctInStage === 3) stars = 3;
+          else if (correctInStage === 2) stars = 2;
+          else if (correctInStage === 1) stars = 1;
+        } else {
+          if (correctInStage === 3) stars = 3;
+          else if (correctInStage === 2) stars = 2;
+          else if (correctInStage === 1) stars = 1;
+        }
+
+        gameState.stageStars[stage] = stars;
+        sfx.playStageClear();
+
+        // Check if game completely finished
+        if (stage === 5) {
+          sfx.playVictory();
+          changeScreen('screen-end');
+          return;
+        }
+
+        // Show transition screen for the NEXT stage
+        showStageTransition(stage + 1);
+      } else {
+        // Just go to next question
+        gameState.currentQuestionIndex += 1;
+        updateGlobalStatus();
+        loadQuestion(gameState.currentQuestionIndex);
+      }
+    }
+
+    // =========================================================================
+    // 10. END SCREEN & LEADERBOARD
+    // =========================================================================
+    function renderEndScreen() {
+      // Clear active session upon successful completion
+      localStorage.removeItem('time_travelers_active_session');
+      
+      document.getElementById('end-final-score').textContent = gameState.score;
+      
+      const totalStars = Object.values(gameState.stageStars).reduce((a, b) => a + b, 0);
+      const statusText = document.getElementById('end-clock-status');
+      
+      // Reset background to main on end screen
+      const body = document.getElementById('game-body');
+      body.className = `game-bg-active text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden font-sans relative select-none bg-main`;
+
+      if (gameState.score === 15) {
+        statusText.textContent = 'ซ่อมแซมสมบูรณ์ 100% (Fully Synchronized)';
+        statusText.className = 'text-base font-bold text-emerald-400 text-glow-blue';
+      } else if (gameState.score >= 10) {
+        statusText.textContent = 'ระบบนาฬิกามิติเริ่มเสถียร (Stable Clock)';
+        statusText.className = 'text-base font-bold text-blue-400 text-glow-blue';
+      } else {
+        statusText.textContent = 'ระบบนาฬิกามิติยังผันผวนอยู่ (Unstable Clock)';
+        statusText.className = 'text-base font-bold text-rose-400';
+      }
+
+      // Render stars breakdown list
+      const starsList = document.getElementById('end-stars-list');
+      starsList.innerHTML = '';
+      for (let s = 1; s <= 5; s++) {
+        const title = stageDetails[s].title.split(' (')[0];
+        const score = gameState.stageScores[s];
+        const starsCount = gameState.stageStars[s];
+        
+        let starsHTML = '';
+        for (let i = 1; i <= 3; i++) {
+          if (i <= starsCount) {
+            starsHTML += '<i class="fa-solid fa-star text-amber-400 mr-0.5 text-xs"></i>';
+          } else {
+            starsHTML += '<i class="fa-regular fa-star text-slate-600 mr-0.5 text-xs"></i>';
+          }
+        }
+
+        const li = document.createElement('div');
+        li.className = 'flex justify-between items-center py-1.5 border-b border-slate-900/50';
+        li.innerHTML = `
+          <span class="text-slate-300 text-xs flex items-center">
+            <span class="w-4 h-4 rounded-full bg-slate-900 border border-slate-800 text-[10px] flex items-center justify-center text-blue-400 mr-2 font-mono">${s}</span>
+            ${title}
+          </span>
+          <div class="flex items-center space-x-3">
+            <span class="text-[10px] text-slate-500 font-mono">(${score}/3 ข้อ)</span>
+            <span>${starsHTML}</span>
+          </div>
+        `;
+        starsList.appendChild(li);
+      }
+
+      saveDataToGoogleSheet(
+        gameState.playerName, 
+        gameState.playerClass, 
+        gameState.score, 
+        totalStars
+      );
+    }
+
+    function saveDataToGoogleSheet(name, grade, score, stars) {
+      showToast('กำลังบันทึกคะแนนเวลากลางของคุณ...');
+
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbyMuf0XAHzvQZdHqbgg--Uu9P--KIWY0T7CpGKUkZ0YIXLp3xvBwhclcGf0YiN1Zhzf/exec';
+
+      const payload = {
+        name: name,
+        grade: grade,
+        score: score,
+        stars: stars,
+        points: gameState.totalPoints,
+        usedCards: gameState.usedCardsInSession.join(','),
+        timestamp: new Date().toISOString()
+      };
+
+      saveToLocalLeaderboard(payload);
+
+      // แปลงข้อมูลเป็น Query Parameters เพื่อส่งผ่าน GET (เสถียรและปลอดภัยจากปัญหา CORS เมื่อเปิดในเครื่องโลคอล)
+      const params = new URLSearchParams({
+        name: payload.name,
+        grade: payload.grade,
+        score: payload.score,
+        stars: payload.stars,
+        points: payload.points,
+        usedCards: payload.usedCards,
+        timestamp: payload.timestamp
+      });
+
+      fetch(`${scriptURL}?${params.toString()}`, {
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-cache'
+      })
+      .then(() => {
+        showToast('ซิงค์คะแนนขึ้นคลาวด์สำเร็จแล้ว!');
+        renderLeaderboard();
+      })
+      .catch(error => {
+        console.warn('Google Sheet Sync Error:', error);
+        showToast('บันทึกสถิติในเครื่องเรียบร้อยแล้ว');
+        renderLeaderboard();
+      });
+    }
+
+    function saveToLocalLeaderboard(playerData) {
+      let leaderboard = JSON.parse(localStorage.getItem('time_travelers_leaderboard')) || [];
+      
+      const existingIndex = leaderboard.findIndex(p => p.name === playerData.name && p.grade === playerData.grade);
+      if (existingIndex !== -1) {
+        if (playerData.points > leaderboard[existingIndex].points || 
+           (playerData.points === leaderboard[existingIndex].points && playerData.stars > leaderboard[existingIndex].stars)) {
+          leaderboard[existingIndex] = playerData;
+        }
+      } else {
+        leaderboard.push(playerData);
+      }
+
+      leaderboard.sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        if (b.stars !== a.stars) return b.stars - a.stars;
+        return b.score - a.score;
+      });
+
+      leaderboard = leaderboard.slice(0, 100);
+      localStorage.setItem('time_travelers_leaderboard', JSON.stringify(leaderboard));
+    }
+
+    function renderLeaderboard() {
+      // Render from local storage cache immediately
+      let cached = JSON.parse(localStorage.getItem('time_travelers_leaderboard')) || [];
+      if (cached.length === 0) {
+        cached = [
+          { name: 'เด็กชายกรีน แอดวานซ์', grade: 'ป.5/1 เลขที่ 1', score: 15, stars: 15, points: 145 },
+          { name: 'เด็กหญิงพิ้งกี้ ไอดอล', grade: 'ป.5/2 เลขที่ 14', score: 14, stars: 14, points: 130 },
+          { name: 'เด็กชายต้นกล้า วิทย์คอม', grade: 'ป.5/1 เลขที่ 3', score: 13, stars: 13, points: 118 },
+          { name: 'เด็กหญิงมะลิ เรียนดี', grade: 'ป.5/3 เลขที่ 25', score: 11, stars: 10, points: 95 }
+        ];
+        localStorage.setItem('time_travelers_leaderboard', JSON.stringify(cached));
+      }
+      renderLeaderboardTable(cached);
+
+      // Fetch fresh data from Google Sheet
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbyMuf0XAHzvQZdHqbgg--Uu9P--KIWY0T7CpGKUkZ0YIXLp3xvBwhclcGf0YiN1Zhzf/exec';
+      fetch(scriptURL)
+        .then(response => response.json())
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            localStorage.setItem('time_travelers_leaderboard', JSON.stringify(data));
+            renderLeaderboardTable(data);
+          }
+        })
+        .catch(err => console.warn("Failed to fetch leaderboard from Google Sheet, using cached data.", err));
+    }
+
+    function renderLeaderboardTable(leaderboard) {
+      const tbody = document.getElementById('leaderboard-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      leaderboard.forEach((player, index) => {
+        const tr = document.createElement('tr');
+        
+        const isCurrentPlayer = (player.name === gameState.playerName && player.grade === gameState.playerClass);
+        if (isCurrentPlayer) {
+          tr.className = 'bg-blue-950/40 font-bold border-y border-blue-500/30';
+        } else {
+          tr.className = 'hover:bg-slate-900/20 transition-colors';
+        }
+
+        let rankHTML = index + 1;
+        if (index === 0) rankHTML = '🥇';
+        else if (index === 1) rankHTML = '🥈';
+        else if (index === 2) rankHTML = '🥉';
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 text-center text-xs font-mono font-bold">${rankHTML}</td>
+          <td class="py-2.5 px-4 flex items-center space-x-2">
+            <span class="truncate max-w-[120px]">${player.name}</span>
+            ${isCurrentPlayer ? '<span class="text-[9px] px-1.5 py-0.5 bg-blue-600 text-white rounded font-mono font-bold uppercase tracking-wider animate__animated animate__flash animate__infinite">YOU</span>' : ''}
+          </td>
+          <td class="py-2.5 px-4 text-center text-xs text-slate-400 font-semibold">${player.grade}</td>
+          <td class="py-2.5 px-4 text-center font-mono text-blue-400 font-bold">${player.points} pts</td>
+          <td class="py-2.5 px-4 text-center text-amber-400 font-bold">${player.stars} ⭐</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Bind form submission programmatically
+    document.addEventListener('DOMContentLoaded', () => {
+      const regForm = document.getElementById('register-form');
+      if (regForm) {
+        regForm.addEventListener('submit', handleRegistration);
+      }
+    });
+
+    // =========================================================================
+    // 11. SPECIAL CARD SYSTEM & MODAL TRIGGERS
+    // =========================================================================
+    const specialCardsDB = {
+      // 1. Time Boost (+30s) - 20 Codes
+      '111001': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111002': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111003': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111004': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111005': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111006': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111007': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111008': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111009': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111010': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111011': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111012': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111013': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111014': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111015': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111016': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111017': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111018': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111019': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      '111020': { type: 'timeBoost', value: 30, desc: 'เพิ่มเวลาในการคิด 30 วินาที' },
+      
+      // 2. Double Score - 20 Codes
+      '222001': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222002': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222003': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222004': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222005': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222006': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222007': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222008': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222009': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222010': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222011': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222012': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222013': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222014': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222015': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222016': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222017': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222018': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222019': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      '222020': { type: 'doubleScore', desc: 'คะแนนคูณสองในข้อปัจจุบัน' },
+      
+      // 3. Skip Question - 20 Codes
+      '777001': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777002': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777003': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777004': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777005': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777006': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777007': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777008': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777009': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777010': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777011': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777012': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777013': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777014': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777015': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777016': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777017': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777018': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777019': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      '777020': { type: 'skipQuestion', desc: 'ผ่านข้อปัจจุบันทันทีและรับคะแนน' },
+      
+      // 4. Oracle Vision (Help) - 20 Codes
+      '888001': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888002': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888003': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888004': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888005': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888006': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888007': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888008': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888009': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888010': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888011': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888012': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888013': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888014': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888015': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888016': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888017': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888018': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888019': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' },
+      '888020': { type: 'oracleVision', desc: 'ตัดตัวเลือกที่ผิดออก 1 ตัวเลือก' }
+    };
+
+    let usedCards = [];
+
+    function useSpecialCard6Digit(inputCode) {
+      if (!inputCode) {
+        showCardFeedback(false, "กรอกรหัสไม่สำเร็จ", "โปรดกรอกรหัสการ์ด 6 หลักลงในช่องว่าง", "⚠️", "text-rose-400", "border-rose-500/30", "bg-rose-950/40");
+        return;
+      }
+      
+      inputCode = inputCode.trim();
+      
+      if (usedCards.includes(inputCode)) {
+        showCardFeedback(false, "การ์ดถูกใช้งานแล้ว", "รหัสการ์ด 6 หลักนี้เคยถูกใช้งานไปแล้วในรอบนี้ ไม่สามารถใช้ซ้ำได้", "❌", "text-rose-400", "border-rose-500/30", "bg-rose-950/40");
+        return;
+      }
+
+      const card = specialCardsDB[inputCode];
+      if (!card) {
+        showCardFeedback(false, "รหัสไม่ถูกต้อง", "รหัสตัวเลข 6 หลักที่คุณกรอกไม่มีอยู่ในระบบนาฬิกามิติ โปรดตรวจสอบอีกครั้ง", "🚫", "text-rose-400", "border-rose-500/30", "bg-rose-950/40");
+        return;
+      }
+
+      usedCards.push(inputCode);
+      gameState.usedCardsInSession.push(inputCode);
+
+      if (card.type === 'timeBoost') {
+        timeRemaining += card.value;
+        updateTimerUI();
+        showCardFeedback(true, "เปิดใช้งาน การ์ดเร่งมิติ สำเร็จ!", "พลังแห่ง<strong>การ์ดเร่งมิติ</strong>ทำงาน!<br>บาเรียเวลากางออกเพิ่มเวลาในการคิดให้คุณอีก <strong>30 วินาที</strong>", "⏳", "text-emerald-400", "border-emerald-500/30", "bg-emerald-950/40", "Special_card_1.png");
+      } 
+      else if (card.type === 'doubleScore') {
+        gameState.doubleScoreActive = true;
+        const statusEl = document.getElementById('active-card-status');
+        if (statusEl) {
+          statusEl.textContent = "🔥 เอฟเฟกต์คูณพลังงานกำลังทำงาน!";
+          statusEl.classList.remove('hidden');
+        }
+        showCardFeedback(true, "เปิดใช้งาน การ์ดคูณพลังงาน สำเร็จ!", "พลังแห่ง<strong>การ์ดคูณพลังงาน</strong>ทำงาน!<br>เมื่อตอบถูกในข้อนี้ คะแนนของคุณจะถูกคูณสองเป็นกรณีพิเศษ! รีบตอบเลยเพื่อเก็บคะแนนสูงสุด", "🔥", "text-emerald-400", "border-emerald-500/30", "bg-emerald-950/40", "Special_card_2.png");
+      } 
+      else if (card.type === 'skipQuestion') {
+        closeCardModal();
+        
+        let matchPoints = Math.max(1, Math.round((timeRemaining / 60) * 10));
+        let pointsEarned = gameState.doubleScoreActive ? (matchPoints * 2) : matchPoints;
+        gameState.score += 1;
+        gameState.totalPoints += pointsEarned;
+        gameState.stageScores[questions[gameState.currentQuestionIndex].stage] += 1;
+        gameState.doubleScoreActive = false;
+        
+        updateGlobalStatus();
+        showCardFeedback(true, "เปิดใช้งาน การ์ดวาร์ปเวลา สำเร็จ!", `พลังแห่ง<strong>การ์ดวาร์ปเวลา</strong>ทำงาน!<br>ประตูมิติข้ามผ่านเปิดออก! คุณผ่านข้อนี้และได้รับคะแนนสะสม <strong>${pointsEarned} คะแนน</strong> เรียบร้อยแล้ว`, "🚀", "text-emerald-400", "border-emerald-500/30", "bg-emerald-950/40", "Special_card_3.png");
+        
+        // Show correct feedback briefly, then go to next question
+        showFeedback(true);
+        document.getElementById('feedback-message').innerHTML = `เปิดการ์ดวาร์ปเวลา! บาเรียเวลาเปิดช่องพิเศษให้คุณผ่านด่านทันที<br><span class="text-sm font-bold text-yellow-400 mt-1 block">+${pointsEarned} คะแนนสะสม</span>`;
+        return;
+      } 
+      else if (card.type === 'oracleVision') {
+        const q = questions[gameState.currentQuestionIndex];
+        let applied = false;
+        
+        if (q.type === 'mcq') {
+          const wrongOpts = q.options.filter(o => o.id !== q.correctAnswer);
+          const targetOpt = wrongOpts[0];
+          const btn = document.querySelector(`.mcq-option[data-id="${targetOpt.id}"]`);
+          if (btn) {
+            btn.style.opacity = '0.25';
+            btn.style.pointerEvents = 'none';
+            applied = true;
+          }
+        } 
+        else if (q.type === 'path') {
+          const wrongOpts = q.options.filter(o => o.id !== q.correctAnswer);
+          const targetOpt = wrongOpts[0];
+          const btn = document.getElementById(`path-opt-${targetOpt.id}`);
+          if (btn) {
+            btn.style.opacity = '0.25';
+            btn.style.pointerEvents = 'none';
+            applied = true;
+          }
+        }
+        else if (q.type === 'reorder') {
+          const firstCorrectId = q.correctAnswer[0];
+          const firstCorrectItem = q.items.find(item => item.id === firstCorrectId);
+          if (firstCorrectItem && !reorderSequence.some(x => x.id === firstCorrectId)) {
+            addToSequence(firstCorrectItem);
+            applied = true;
+          }
+        }
+        else if (q.type === 'keymatch' || q.type === 'match') {
+          const firstLeftKey = Object.keys(q.correctAnswer)[0];
+          const correctRightVal = q.correctAnswer[firstLeftKey];
+          activeMatches[firstLeftKey] = correctRightVal;
+          if (q.type === 'keymatch') {
+            const label = firstLeftKey === 'key3' ? '🔑 3 เหลี่ยม' : firstLeftKey === 'key4' ? '🔑 4 เหลี่ยม' : '🔑 5 เหลี่ยม';
+            document.getElementById(`slot-${correctRightVal}`).innerHTML = `<span class="text-[10px] bg-emerald-500 text-slate-950 font-bold py-1 px-2 rounded-lg">${label}</span>`;
+          } else {
+            updateConnectedNodeStyles();
+            drawMatchLines();
+          }
+          applied = true;
+        }
+
+        if (applied) {
+          showCardFeedback(true, "เปิดใช้งาน การ์ดเนตรนิมิต สำเร็จ!", "พลังแห่ง<strong>การ์ดเนตรนิมิต</strong>ทำงาน!<br>เนตรแห่งความรอบรู้ขจัดตัวเลือกที่ผิดให้คุณแล้ว <strong>1 ตัวเลือก</strong> เป็นตัวช่วยในการตัดสินใจ", "👁️", "text-emerald-400", "border-emerald-500/30", "bg-emerald-950/40", "Special_card_4.png");
+        } else {
+          showCardFeedback(true, "เปิดใช้งาน การ์ดเนตรนิมิต สำเร็จ!", "การ์ดเนตรนิมิตเปิดใช้งานแล้ว แต่ไม่สามารถใช้กับข้อคำถามประเภทนี้ได้", "🔮", "text-emerald-400", "border-emerald-500/30", "bg-emerald-950/40", "Special_card_4.png");
+        }
+      }
+
+      closeCardModal();
+    }
+
+    function openLeaderboardModal() {
+      sfx.playClick();
+      const modal = document.getElementById('modal-leaderboard');
+      const tbody = document.getElementById('modal-leaderboard-body');
+      if (modal && tbody) {
+        // First render from local storage cache
+        let cached = JSON.parse(localStorage.getItem('time_travelers_leaderboard')) || [];
+        renderModalTable(cached);
+
+        // Fetch fresh data from Google Sheet
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyMuf0XAHzvQZdHqbgg--Uu9P--KIWY0T7CpGKUkZ0YIXLp3xvBwhclcGf0YiN1Zhzf/exec';
+        fetch(scriptURL)
+          .then(res => res.json())
+          .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+              localStorage.setItem('time_travelers_leaderboard', JSON.stringify(data));
+              renderModalTable(data);
+            }
+          })
+          .catch(err => console.warn(err));
+
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function renderModalTable(leaderboard) {
+      const tbody = document.getElementById('modal-leaderboard-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      leaderboard.forEach((player, index) => {
+        const tr = document.createElement('tr');
+        const isCurrentPlayer = (player.name === gameState.playerName && player.grade === gameState.playerClass);
+        if (isCurrentPlayer) {
+          tr.className = 'bg-blue-950/40 font-bold border-y border-blue-500/30';
+        } else {
+          tr.className = 'hover:bg-slate-900/15 transition-colors';
+        }
+
+        let rankHTML = index + 1;
+        if (index === 0) rankHTML = '🥇';
+        else if (index === 1) rankHTML = '🥈';
+        else if (index === 2) rankHTML = '🥉';
+
+        tr.innerHTML = `
+          <td class="py-2.5 px-4 text-center text-xs font-mono font-bold">${rankHTML}</td>
+          <td class="py-2.5 px-4 flex items-center space-x-2">
+            <span class="truncate max-w-[120px]">${player.name}</span>
+            ${isCurrentPlayer ? '<span class="text-[9px] px-1.5 py-0.5 bg-blue-600 text-white rounded font-mono font-bold">YOU</span>' : ''}
+          </td>
+          <td class="py-2.5 px-4 text-center text-xs text-slate-400 font-semibold">${player.grade}</td>
+          <td class="py-2.5 px-4 text-center font-mono text-blue-400 font-bold">${player.points} pts</td>
+          <td class="py-2.5 px-4 text-center text-amber-400 font-bold">${player.stars} ⭐</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function closeLeaderboardModal() {
+      const modal = document.getElementById('modal-leaderboard');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function openCardModal() {
+      sfx.playClick();
+      const modal = document.getElementById('modal-special-card');
+      const input = document.getElementById('card-code-input');
+      const statusEl = document.getElementById('active-card-status');
+      
+      if (input) input.value = '';
+      
+      if (statusEl) {
+        if (gameState.doubleScoreActive) {
+          statusEl.textContent = "🔥 เอฟเฟกต์คูณสองกำลังทำงาน!";
+          statusEl.classList.remove('hidden');
+        } else {
+          statusEl.classList.add('hidden');
+        }
+      }
+
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeCardModal() {
+      const modal = document.getElementById('modal-special-card');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function submitCardCode() {
+      const input = document.getElementById('card-code-input');
+      if (input) {
+        useSpecialCard6Digit(input.value);
+      }
+    }
+
+    function checkMilestones() {
+      const milestones = [40, 80, 120];
+      for (let m of milestones) {
+        if (gameState.totalPoints >= m && !gameState.triggeredMilestones.includes(m)) {
+          gameState.triggeredMilestones.push(m);
+          showMilestoneModal(m);
+          break;
+        }
+      }
+    }
+
+    function showMilestoneModal(points) {
+      const modal = document.getElementById('modal-milestone');
+      const text = document.getElementById('milestone-text');
+      if (modal && text) {
+        text.innerHTML = `ยินดีด้วย! คะแนนสะสมรวมของคุณถึง <strong class="text-purple-400 text-sm font-bold font-orbitron">${points}</strong> คะแนนแล้ว!<br><br>โปรดไปรับการ์ดกระดาษพิเศษใบถัดไปจากผู้คุมห้องเรียน เพื่อนำรหัสมากรอกเปิดพลังตัวช่วยในด่านถัดไปได้เลย!`;
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeMilestoneModal() {
+      const modal = document.getElementById('modal-milestone');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function showCardFeedback(isSuccess, title, desc, emoji, themeColorClass, borderClass, bgIconClass, cardImage) {
+      const modal = document.getElementById('modal-card-feedback');
+      const content = document.getElementById('card-feedback-content');
+      const icon = document.getElementById('card-feedback-icon');
+      const titleEl = document.getElementById('card-feedback-title');
+      const descEl = document.getElementById('card-feedback-desc');
+      const imgContainer = document.getElementById('card-feedback-image-container');
+      const imgEl = document.getElementById('card-feedback-image');
+
+      if (!modal || !content || !icon || !titleEl || !descEl) return;
+
+      content.className = `relative w-full max-w-sm bg-slate-900/95 border ${borderClass} rounded-3xl p-6 shadow-card-dark text-center space-y-4 animate__animated animate__zoomIn`;
+      
+      if (cardImage && isSuccess) {
+        icon.classList.add('hidden');
+        if (imgContainer && imgEl) {
+          imgEl.src = cardImage;
+          imgContainer.classList.remove('hidden');
+        }
+      } else {
+        icon.classList.remove('hidden');
+        icon.className = `w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl shadow-lg border ${borderClass} ${bgIconClass} ${themeColorClass}`;
+        icon.innerHTML = emoji;
+        if (imgContainer) imgContainer.classList.add('hidden');
+      }
+      
+      titleEl.textContent = title;
+      titleEl.className = `text-lg font-bold ${themeColorClass}`;
+      descEl.innerHTML = desc;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeCardFeedbackModal() {
+      const modal = document.getElementById('modal-card-feedback');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // --- Active Session Recovery (Auto-Resume) ---
+    let tempResumeState = null;
+
+    function checkActiveSession() {
+      const saved = localStorage.getItem('time_travelers_active_session');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          if (state && state.playerName && state.currentQuestionIndex > 0) {
+            showResumeModal(state);
+            return;
+          }
+        } catch (e) {
+          localStorage.removeItem('time_travelers_active_session');
+        }
+      }
+      changeScreen('screen-register');
+    }
+
+    function showResumeModal(state) {
+      tempResumeState = state;
+      const modal = document.getElementById('modal-resume');
+      const text = document.getElementById('resume-text');
+      if (modal && text) {
+        const stageNum = questions[state.currentQuestionIndex].stage;
+        text.innerHTML = `ตรวจพบประวัติการเล่นของ <strong>${state.playerName} (${state.playerClass})</strong><br>ค้างอยู่ที่ ด่านที่ ${stageNum} ข้อที่ ${(state.currentQuestionIndex % 3) + 1}<br><br>ต้องการเล่นต่อจากจุดเดิมหรือไม่?`;
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function confirmResume(shouldResume) {
+      const modal = document.getElementById('modal-resume');
+      if (modal) modal.classList.add('hidden');
+
+      if (shouldResume && tempResumeState) {
+        // Restore state
+        Object.assign(gameState, tempResumeState);
+        
+        // Restore UI
+        const nameEl = document.getElementById('display-name');
+        if (nameEl) nameEl.textContent = gameState.playerName;
+        updateGlobalStatus();
+        
+        changeScreen('screen-gameplay');
+        loadQuestion(gameState.currentQuestionIndex);
+      } else {
+        // Start fresh
+        localStorage.removeItem('time_travelers_active_session');
+        changeScreen('screen-register');
+      }
+      tempResumeState = null;
+    }
+
+    let clearClickCount = 0;
+    function adminClearLeaderboard() {
+      clearClickCount++;
+      if (clearClickCount >= 5) {
+        clearClickCount = 0;
+        if (confirm("ต้องการล้างข้อมูลตารางอันดับที่แคชไว้ในเครื่องนี้หรือไม่?\n\n(หมายเหตุ: ข้อมูลใน Google Sheet จะยังคงอยู่ หากต้องการลบข้อมูลถาวรต้องไปลบในหน้า Google Sheet ด้วยครับ)")) {
+          localStorage.removeItem('time_travelers_leaderboard');
+          localStorage.removeItem('time_travelers_active_session');
+          alert("ล้างแคชประวัติการเล่นและตารางอันดับในเครื่องนี้สำเร็จแล้ว!");
+          location.reload();
+        }
+      }
+    }
+
+    // เริ่มเล่นเพลง BGM เมื่อบราวเซอร์โหลดหน้าเว็บเสร็จสมบูรณ์
+    document.addEventListener('DOMContentLoaded', () => {
+      bgm.play('main');
+    });
+
+    renderLeaderboard();
+  </script>
+</body>
+</html>
