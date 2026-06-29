@@ -37,6 +37,9 @@
   <!-- FontAwesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- SweetAlert2 for beautiful alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
@@ -137,6 +140,114 @@
 
     #bgm-volume::-webkit-slider-thumb:hover {
       transform: scale(1.2);
+    }
+
+    /* Spin & Slam Animation for Winning Card */
+    .animate-card-spin-slam {
+      animation: cardSpinSlam 1.2s cubic-bezier(0.15, 0.85, 0.1, 1) forwards;
+      perspective: 1000px;
+    }
+
+    @keyframes cardSpinSlam {
+      0% {
+        transform: scale(0.3) rotateY(-720deg);
+        filter: brightness(0.5) blur(1px);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.5) rotateY(-360deg);
+        filter: brightness(1.5) blur(0px);
+        opacity: 0.8;
+      }
+      80% {
+        transform: scale(0.95) rotateY(15deg);
+        filter: brightness(1.1);
+        opacity: 1;
+      }
+      90% {
+        transform: scale(1.03) rotateY(-5deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotateY(0deg);
+        filter: brightness(1);
+        opacity: 1;
+      }
+    }
+
+    /* Dynamic Glow Colors matching each card's theme */
+    .glow-card-1 {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.95), 0 0 50px rgba(59, 130, 246, 0.4);
+      border-color: #3b82f6 !important;
+    }
+    .glow-card-2 {
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.95), 0 0 50px rgba(245, 158, 11, 0.4);
+      border-color: #f59e0b !important;
+    }
+    .glow-card-3 {
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.95), 0 0 50px rgba(168, 85, 247, 0.4);
+      border-color: #a855f7 !important;
+    }
+    .glow-card-4 {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.95), 0 0 50px rgba(16, 185, 129, 0.4);
+      border-color: #10b981 !important;
+    }
+
+    /* Epic Reveal Screen Shake */
+    .epic-shake {
+      animation: epicShake 0.45s ease-in-out;
+    }
+
+    @keyframes epicShake {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      10%, 30%, 50%, 70%, 90% { transform: translate(-4px, 2px) rotate(-0.5deg); }
+      20%, 40%, 60%, 80% { transform: translate(4px, -2px) rotate(0.5deg); }
+    }
+
+    /* Shaking Timer Icon */
+    @keyframes iconShake {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      20%, 60% { transform: scale(1.1) rotate(-10deg); }
+      40%, 80% { transform: scale(1.1) rotate(10deg); }
+    }
+    .animate-icon-shake {
+      animation: iconShake 0.15s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    /* Epic Color-matched Fullscreen Flash */
+    .epic-flash {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      animation: flashFade 0.7s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes flashFade {
+      0% { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
+
+    /* Epic Particle Sparkles */
+    .epic-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 15;
+      animation: particleFly 0.9s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+    }
+
+    @keyframes particleFly {
+      0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0);
+        opacity: 0;
+      }
     }
 
     #bgm-volume::-moz-range-track {
@@ -336,7 +447,7 @@
             <i class="fa-solid fa-lightbulb text-yellow-400"></i>
             <span>การฝึกคิดอย่างเป็นระบบ</span>
           </h3>
-          <p class="text-xs leading-relaxed text-slate-400">ช่วยให้นักเรียนฝึกหาคำตอบจากรูปแบบ ลำดับขั้นตอน การตัดสินใจเชิงตรรกะ และคาดเดาผลลัพธ์</p>
+          <p class="text-xs leading-relaxed text-slate-400">ช่วยให้ผู้เล่นฝึกหาคำตอบจากรูปแบบ ลำดับขั้นตอน การตัดสินใจเชิงตรรกะ และคาดเดาผลลัพธ์</p>
         </div>
 
         <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-1">
@@ -348,7 +459,64 @@
         </div>
       </div>
 
-      <button onclick="showStageTransition(1)" class="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-lg rounded-2xl shadow-neon-blue transition-all flex items-center justify-center space-x-2">
+      <!-- Special Cards Info Section -->
+      <div class="border-t border-slate-800/80 pt-6 mt-6 space-y-4 text-left">
+        <h3 class="text-xs font-bold text-purple-400 uppercase tracking-wider flex items-center space-x-2">
+          <i class="fa-solid fa-ticket-simple text-purple-400"></i>
+          <span>ระบบการ์ดพิเศษและทางเลือกใช้งาน</span>
+        </h3>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          เมื่อสะสมแต้มกู้เวลาได้ครบหลักไมล์ (**20 / 40 / 60 คะแนน**) ระบบจะปลดล็อกวงล้อสุ่มการ์ดพิเศษให้ผู้เล่นลุ้นรับ 1 ใบ โดยผู้เล่นมีสิทธิ์เลือกจัดการได้ 2 รูปแบบ:
+        </p>
+        
+        <!-- Choice Rules -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-xl flex items-start space-x-2.5">
+            <span class="text-emerald-400 mt-0.5 text-base"><i class="fa-solid fa-bolt"></i></span>
+            <div>
+              <h4 class="font-bold text-emerald-300">⚡ ใช้การ์ดตอนนี้</h4>
+              <p class="text-[10px] text-slate-400 mt-0.5 leading-normal">เปิดกรอกรหัส 6 หลักจากการ์ดกระดาษที่ได้รับจากผู้คุมเกมทันที เพื่อเปิดใช้งานเอฟเฟกต์ช่วยเล่นในเกม</p>
+            </div>
+          </div>
+          <div class="p-3 bg-amber-950/20 border border-amber-500/20 rounded-xl flex items-start space-x-2.5">
+            <span class="text-amber-400 mt-0.5 text-base"><i class="fa-solid fa-suitcase-rolling"></i></span>
+            <div>
+              <h4 class="font-bold text-amber-300">🎒 เก็บเข้ากระเป๋า</h4>
+              <p class="text-[10px] text-slate-400 mt-0.5 leading-normal">เก็บสะสมการ์ดไว้ในกระเป๋าเดินทางข้ามเวลา เพื่อนำไปกรอกรหัสแปลงเป็นคะแนนโบนัสตอนจบเกม</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards Breakdown Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <!-- Card 1 -->
+          <div class="bg-slate-950/40 border border-slate-800/80 p-2.5 rounded-xl text-center flex flex-col items-center justify-between space-y-1">
+            <img src="Special_card_1.png" class="w-10 h-15 object-cover rounded border border-slate-800/80" alt="Card 1">
+            <div class="text-[10px] font-bold text-slate-200 mt-1">การ์ดเร่งมิติ</div>
+            <div class="text-[9px] text-slate-500">เพิ่มเวลาคิด +30s<br>(โบนัสสะสม: +50 pts)</div>
+          </div>
+          <!-- Card 2 -->
+          <div class="bg-slate-950/40 border border-slate-800/80 p-2.5 rounded-xl text-center flex flex-col items-center justify-between space-y-1">
+            <img src="Special_card_2.png" class="w-10 h-15 object-cover rounded border border-slate-800/80" alt="Card 2">
+            <div class="text-[10px] font-bold text-slate-200 mt-1">การ์ดคูณพลังงาน</div>
+            <div class="text-[9px] text-slate-500">คะแนนคูณสองในข้อถัดไป<br>(โบนัสสะสม: +100 pts)</div>
+          </div>
+          <!-- Card 3 -->
+          <div class="bg-slate-950/40 border border-slate-800/80 p-2.5 rounded-xl text-center flex flex-col items-center justify-between space-y-1">
+            <img src="Special_card_3.png" class="w-10 h-15 object-cover rounded border border-slate-800/80" alt="Card 3">
+            <div class="text-[10px] font-bold text-slate-200 mt-1">การ์ดวาร์ปเวลา</div>
+            <div class="text-[9px] text-slate-500">ผ่านข้อนั้นและได้คะแนนทันที<br>(โบนัสสะสม: +150 pts)</div>
+          </div>
+          <!-- Card 4 -->
+          <div class="bg-slate-950/40 border border-slate-800/80 p-2.5 rounded-xl text-center flex flex-col items-center justify-between space-y-1">
+            <img src="Special_card_4.png" class="w-10 h-15 object-cover rounded border border-slate-800/80" alt="Card 4">
+            <div class="text-[10px] font-bold text-slate-200 mt-1">การ์ดเนตรนิมิต</div>
+            <div class="text-[9px] text-slate-500">ช่วยตัดตัวเลือกที่ผิดออก<br>(โบนัสสะสม: +200 pts)</div>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="showStageTransition(1)" class="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-lg rounded-2xl shadow-neon-blue transition-all flex items-center justify-center space-x-2 mt-6">
         <i class="fa-solid fa-rocket text-sm"></i>
         <span>เข้าสู่มิติเวลา (Launch Game)</span>
       </button>
@@ -494,6 +662,34 @@
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ==================== 5.5 REDEEM SAVED CARDS SCREEN ==================== -->
+    <section id="screen-redeem" class="hidden w-full max-w-xl mx-auto bg-slate-900/85 backdrop-blur-md border border-slate-800 rounded-3xl p-6 md:p-8 shadow-card-dark text-center space-y-6 animate__animated animate__fadeIn">
+      <!-- Title -->
+      <div class="space-y-2">
+        <span class="px-3.5 py-1.5 rounded-full bg-purple-950/50 text-purple-300 text-[10px] font-semibold tracking-wide border border-purple-500/30 shadow-neon-purple">
+          ขั้นตอนสุดท้ายก่อนสรุปคะแนน
+        </span>
+        <h2 class="text-2xl font-extrabold tracking-tight text-white leading-tight font-orbitron mt-2">
+          🔮 ห้องแปลงพลังงานการ์ดสะสม
+        </h2>
+        <p class="text-slate-400 text-xs max-w-md mx-auto leading-relaxed">
+          หากกลุ่มของคุณมีภาพการ์ดพิเศษที่ **เลือกเก็บสะสมไว้** ในกระเป๋าเดินทาง ให้นำรหัสลับ 6 หลักจากการ์ดกระดาษที่ได้รับจากผู้คุมเกมมากรอกเพื่อแลกเป็นคะแนนพลังงานโบนัสสะสม!
+        </p>
+      </div>
+
+      <!-- Saved Cards List -->
+      <div id="redeem-cards-list" class="space-y-4 max-h-[280px] overflow-y-auto pr-1">
+        <!-- Dynamic list of saved cards -->
+      </div>
+
+      <!-- Action Button to end game -->
+      <div class="pt-4 border-t border-slate-800 flex flex-col gap-3">
+        <button onclick="goToFinalSummary()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-2xl shadow-neon-blue transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 text-sm">
+          เสร็จสิ้นและสรุปผลอันดับ ➡️
+        </button>
       </div>
     </section>
 
@@ -693,25 +889,110 @@
   <!-- Milestone Reward Modal -->
   <div id="modal-milestone" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
     <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm"></div>
-    <div class="relative w-full max-w-sm bg-slate-900/95 border border-purple-500/30 rounded-3xl p-6 shadow-card-dark animate__animated animate__zoomIn text-center space-y-5">
-      <div class="w-16 h-16 bg-purple-950/50 rounded-full flex items-center justify-center text-purple-400 mx-auto border border-purple-500/30 clock-pulse">
-        <i class="fa-solid fa-gift text-2xl animate-bounce"></i>
+    <div class="relative w-full max-w-sm bg-slate-900/95 border border-purple-500/30 rounded-3xl p-6 shadow-card-dark animate__animated animate__zoomIn text-center space-y-4">
+      
+      <!-- View 1: Congratulatory / Prep View -->
+      <div id="milestone-prep-view" class="space-y-5">
+        <div class="w-16 h-16 bg-purple-950/50 rounded-full flex items-center justify-center text-purple-400 mx-auto border border-purple-500/30 clock-pulse">
+          <i class="fa-solid fa-gift text-2xl animate-bounce"></i>
+        </div>
+        <div class="space-y-2">
+          <h3 class="text-lg font-bold text-white">🎉 ยินดีด้วย! ผู้พิทักษ์เวลา</h3>
+          <p id="milestone-prep-text" class="text-xs text-slate-300 leading-relaxed">
+            คะแนนสะสมของคุณถึงเกณฑ์แล้ว! คุณได้รับสิทธิ์สุ่มการ์ดพิเศษ 1 ใบ โปรดคลิกปุ่มด้านล่างเพื่อเริ่มการสุ่มการ์ดรางวัล!
+          </p>
+        </div>
+        <button onclick="startMilestoneLuckyDraw()" class="w-full py-3.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-neon-purple transition-all hover:scale-102 active:scale-98 text-sm">
+          🔮 เริ่มสุ่มการ์ดรางวัล (Start Lucky Draw)
+        </button>
       </div>
-      <div class="space-y-2">
-        <h3 class="text-lg font-bold text-white">🎉 ยินดีด้วย! ผู้พิทักษ์เวลา</h3>
-        <p id="milestone-text" class="text-xs text-slate-300 leading-relaxed">
-          คะแนนสะสมของคุณถึง 500 คะแนนแล้ว! ไปรับการ์ดกระดาษพิเศษเพื่อนำรหัสมากรอกในเกมได้เลย!
-        </p>
+
+      <!-- View 2: Rolling & Result View (Hidden initially) -->
+      <div id="milestone-roll-view" class="hidden space-y-4">
+        <div class="w-14 h-14 bg-purple-950/50 rounded-full flex items-center justify-center text-purple-400 mx-auto border border-purple-500/30 clock-pulse" id="milestone-header-icon">
+          <i class="fa-solid fa-gift text-xl animate-bounce" id="milestone-gift-icon"></i>
+        </div>
+        
+        <div class="space-y-1">
+          <p id="milestone-title-text" class="text-[11px] text-slate-400 font-medium">ระบบกำลังสุ่มการ์ดพิเศษให้กลุ่มของคุณ...</p>
+        </div>
+
+        <!-- Card Roll Container (Slot Machine Reel) -->
+        <div id="card-roll-wrapper" class="relative w-full max-w-[240px] h-[140px] mx-auto overflow-hidden bg-slate-950/80 border border-slate-800 rounded-2xl flex items-center shadow-inner">
+          <div class="absolute left-1/2 -translate-x-1/2 w-[86px] h-[126px] border-2 border-purple-500 rounded-xl pointer-events-none z-20 shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
+          <div id="card-roll-track" class="absolute flex items-center space-x-4" style="transform: translateX(80px); transition: none;"></div>
+        </div>
+
+        <!-- Big Card Winner Display -->
+        <div id="winner-card-display" class="hidden flex flex-col items-center space-y-3 py-1 animate__animated animate__fadeIn">
+          <div id="winner-card-img-container" class="w-[120px] h-[180px] rounded-2xl overflow-hidden border-2 border-slate-800 transition-all duration-300">
+            <img id="winner-card-image" src="" alt="Winner Card" class="w-full h-full object-cover">
+          </div>
+          <div class="bg-purple-950/40 border border-purple-500/20 px-4 py-2.5 rounded-2xl text-center w-full max-w-[260px]">
+            <h4 id="winner-card-name" class="text-xs font-bold text-purple-300 font-orbitron">ชื่อการ์ดพิเศษ</h4>
+            <p id="winner-card-detail" class="text-[10px] text-slate-300 mt-1 leading-relaxed">รายละเอียดความสามารถของการ์ด</p>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <p id="milestone-text" class="text-xs text-slate-300 leading-relaxed min-h-[48px]">
+            กำลังหมุนลุ้นรางวัล...
+          </p>
+        </div>
+
+        <!-- Choice Buttons (Hidden during roll, shown after roll ends) -->
+        <div id="milestone-choice-buttons" class="hidden flex justify-between gap-3 pt-2">
+          <!-- Left Button: Green -->
+          <button onclick="chooseCardAction('use')" class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all text-xs shadow-md">
+            ⚡ ใช้การ์ดตอนนี้
+          </button>
+          <!-- Right Button: Yellow -->
+          <button onclick="chooseCardAction('save')" class="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl transition-all text-xs shadow-md">
+            🎒 เก็บเข้ากระเป๋า
+          </button>
+        </div>
+        
+        <button id="btn-close-milestone" class="hidden w-full py-3 bg-slate-800 text-slate-400 font-bold rounded-xl transition-all" disabled>
+          สุ่มเสร็จสิ้น
+        </button>
       </div>
-      <button onclick="closeMilestoneModal()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all">
-        รับทราบภารกิจ
-      </button>
     </div>
   </div>
 
-  <!-- Floating Special Card Button (Always visible during gameplay) -->
-  <div id="floating-card-trigger" class="hidden">
-    <button onclick="openCardModal()" class="fixed bottom-6 left-6 z-40 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold px-4 py-2.5 rounded-2xl shadow-neon-gold flex items-center space-x-2 transition-all hover:scale-105 active:scale-95">
+  <!-- Travel Bag Modal -->
+  <div id="modal-travel-bag" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-sm" onclick="closeTravelBagModal()"></div>
+    <div class="relative w-full max-w-md bg-slate-900/95 border border-blue-500/30 rounded-3xl p-6 shadow-card-dark animate__animated animate__zoomIn space-y-4">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-suitcase-rolling text-blue-400"></i>
+          <span>กระเป๋าเดินทางข้ามเวลา</span>
+        </h3>
+        <button onclick="closeTravelBagModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <!-- Bag Content -->
+      <div id="travel-bag-content" class="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+        <!-- Will be dynamically populated in JavaScript -->
+      </div>
+
+      <div class="text-center pt-2">
+        <button onclick="closeTravelBagModal()" class="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all text-xs">
+          ปิดหน้าต่าง (Close)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Action Buttons (Bottom-Left) -->
+  <div id="floating-card-trigger" class="hidden fixed bottom-6 left-6 z-40 flex flex-col space-y-2.5 items-start">
+    <!-- Travel Bag Button (above) -->
+    <button onclick="openTravelBagModal()" class="bg-slate-900/95 hover:bg-slate-850 text-white border border-slate-800 font-bold px-4 py-2.5 rounded-2xl shadow-2xl flex items-center space-x-2 transition-all hover:scale-105 active:scale-95">
+      <i class="fa-solid fa-suitcase-rolling text-sm text-blue-400"></i>
+      <span class="text-xs md:text-sm font-bold">กระเป๋าเดินทาง</span>
+    </button>
+    <!-- Use Card Button (below) -->
+    <button onclick="openCardModal()" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-bold px-4 py-2.5 rounded-2xl shadow-neon-gold flex items-center space-x-2 transition-all hover:scale-105 active:scale-95">
       <i class="fa-solid fa-ticket-simple text-sm"></i>
       <span class="text-xs md:text-sm font-bold">ใช้การ์ดพิเศษ</span>
     </button>
@@ -744,7 +1025,7 @@
       // ตั้งค่าช่วงเวลาเริ่มต้นที่จะข้าม (หน่วยเป็นวินาที) เพื่อเลี่ยงช่วงเงียบต้นเพลง
       startOffsets: {
         main: 0,
-        stage1: 7.0,  // ข้ามช่วงเงียบต้นเพลงด่าน 1 ไปเป็นเวลา 4 วินาที (คุณครูสามารถปรับเพิ่ม/ลดตัวเลขนี้ได้ตามต้องการ)
+        stage1: 7.0,  // ข้ามช่วงเงียบต้นเพลงด่าน 1 ไปเป็นเวลา 4 วินาที (ผู้คุมเกมสามารถปรับเพิ่ม/ลดตัวเลขนี้ได้ตามต้องการ)
         stage2: 0,
         stage3: 0,
         stage4: 0,
@@ -975,6 +1256,31 @@
         }
       }
 
+      playCountdownTick() {
+        if (this.muted) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+          
+          let osc = this.ctx.createOscillator();
+          let gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(1000, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(500, this.ctx.currentTime + 0.12);
+
+          gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.12);
+        } catch (e) {
+          console.warn("Failed to play countdown tick:", e);
+        }
+      }
+
       playStageClear() {
         if (this.muted) return;
         try {
@@ -1129,8 +1435,8 @@
         id: 2,
         stage: 1,
         type: 'mcq',
-        questionText: 'กลไกเติมน้ำในถ้ำระบุเงื่อนไขปุ่มเปิดปิดไว้ว่า:<br>"ถ้าดึงเชือกสีแดง น้ำจะไหล แต่ถ้าดึงเชือกสีเขียว ไฟจะจุดติด"<br><br>โจทย์: ถ้านักเรียนต้องการ <strong class="text-rose-400">ดับไฟในถ้ำ</strong> และ <strong class="text-blue-300">ต้องการน้ำ</strong> ต้องดึงเชือกสีอะไร?',
-        description: 'เลือกปุ่มสั่งการทำงานของระบบเพื่อดับไฟและเรียกน้ำมาใช้',
+        questionText: 'กลไกเติมน้ำในถ้ำระบุเงื่อนไขปุ่มเปิดปิดไว้ว่า:<br>"ถ้าดึงเชือกสีแดง น้ำจะไหล แต่ถ้าดึงเชือกสีเขียว ไฟจะจุดติด"<br><br>โจทย์: ถ้าผู้เล่นต้องการ <strong class="text-rose-400">ดับไฟในถ้ำ</strong> และ <strong class="text-blue-300">ต้องการน้ำ</strong> ต้องดึงเชือกสีอะไร?',
+        description: 'เลือกปุ่มสั่งการทำงาน of ระบบเพื่อดับไฟและเรียกน้ำมาใช้',
         hint: 'เมื่อดึงเชือกสีแดง น้ำจะไหลออกมาดับไฟในถ้ำ และได้น้ำตามต้องการพอดี',
         options: [
           { id: 'A', text: 'ก. สีแดง' },
@@ -1143,7 +1449,7 @@
         id: 3,
         stage: 1,
         type: 'mcq',
-        questionText: 'สูตรการทำอาหารพลังงานสูงของเผ่าหินคือ:<br><strong class="text-amber-400">เนื้อ 1 ชิ้น + ผลไม้ 2 ลูก = อาหารพลังงานสูง 1 จาน</strong><br><br>โจทย์: ถ้าตอนนี้นักเรียนมี <strong class="text-rose-400">เนื้อ 2 ชิ้น</strong> และ <strong class="text-emerald-400">ผลไม้ 4 ลูก</strong> จะสามารถทำอาหารพลังงานสูงได้กี่จาน?',
+        questionText: 'สูตรการทำอาหารพลังงานสูงของเผ่าหินคือ:<br><strong class="text-amber-400">เนื้อ 1 ชิ้น + ผลไม้ 2 ลูก = อาหารพลังงานสูง 1 จาน</strong><br><br>โจทย์: ถ้าตอนนี้ผู้เล่นมี <strong class="text-rose-400">เนื้อ 2 ชิ้น</strong> และ <strong class="text-emerald-400">ผลไม้ 4 ลูก</strong> จะสามารถทำอาหารพลังงานสูงได้กี่จาน?',
         description: 'คำนวณสัดส่วนวัตถุดิบและผลลัพธ์ของอาหารที่ได้',
         hint: 'เนื้อ 1 ชิ้นได้ 1 จาน, ผลไม้ 2 ลูกได้ 1 จาน ลองดูว่าถ้าเพิ่มเป็นสองเท่าจะได้อาหารกี่จานเอ่ย?',
         options: [
@@ -1345,7 +1651,10 @@
       totalPoints: 0,
       triggeredMilestones: [],
       doubleScoreActive: false,
-      usedCardsInSession: []
+      usedCardsInSession: [],
+      wonCards: [],         // List of cards won: { id, milestone, status: 'saved' | 'to_use' | 'used' | 'redeemed' }
+      lastWonCardId: null,   // Temp holder during lucky draw
+      lastMilestonePoints: 0 // Temp holder
     };
 
     // Stage tracking variables
@@ -1430,6 +1739,9 @@
       if (resume) {
         const session = JSON.parse(localStorage.getItem('time_travelers_active_session'));
         Object.assign(gameState, session);
+        if (!gameState.wonCards) {
+          gameState.wonCards = [];
+        }
         
         const displayNameEl = document.getElementById('display-name');
         if (displayNameEl) displayNameEl.textContent = gameState.playerName;
@@ -1554,6 +1866,9 @@
       gameState.triggeredMilestones = [];
       gameState.doubleScoreActive = false;
       gameState.usedCardsInSession = [];
+      gameState.wonCards = [];
+      gameState.lastWonCardId = null;
+      gameState.lastMilestonePoints = 0;
       usedCards = [];
       
       document.getElementById('student-name').value = '';
@@ -1719,6 +2034,10 @@
         timeRemaining--;
         updateTimerUI();
 
+        if (timeRemaining <= 10 && timeRemaining > 0) {
+          sfx.playCountdownTick();
+        }
+
         if (timeRemaining <= 0) {
           clearInterval(timerInterval);
           handleTimeOut();
@@ -1729,14 +2048,29 @@
     function updateTimerUI() {
       const secondsEl = document.getElementById('timer-seconds');
       const badgeEl = document.getElementById('timer-badge');
+      const iconEl = badgeEl ? badgeEl.querySelector('i') : null;
       if (!secondsEl || !badgeEl) return;
 
       secondsEl.textContent = timeRemaining;
 
-      if (timeRemaining <= 15) {
-        badgeEl.className = 'flex items-center space-x-1.5 bg-rose-950 text-rose-400 px-2.5 py-1 rounded-full border border-rose-500 animate-pulse text-xs font-bold';
+      if (timeRemaining <= 10) {
+        badgeEl.className = 'flex items-center space-x-1.5 bg-rose-950 text-rose-400 px-2.5 py-1 rounded-full border border-rose-500 text-xs font-bold animate-pulse';
+        if (iconEl) {
+          iconEl.className = 'fa-solid fa-stopwatch text-rose-400 animate-icon-shake';
+          iconEl.style.animationDuration = '0.15s';
+        }
+      } else if (timeRemaining <= 15) {
+        badgeEl.className = 'flex items-center space-x-1.5 bg-rose-950/80 text-rose-300 px-2.5 py-1 rounded-full border border-rose-500/40 text-xs font-bold animate-pulse';
+        if (iconEl) {
+          iconEl.className = 'fa-solid fa-stopwatch animate-spin';
+          iconEl.style.animationDuration = '3s';
+        }
       } else {
         badgeEl.className = 'flex items-center space-x-1.5 bg-slate-950/60 text-slate-300 px-2.5 py-1 rounded-full border border-slate-800 text-xs font-bold';
+        if (iconEl) {
+          iconEl.className = 'fa-solid fa-stopwatch animate-spin';
+          iconEl.style.animationDuration = '6s';
+        }
       }
     }
 
@@ -2491,7 +2825,7 @@
         // Check if game completely finished
         if (stage === 5) {
           sfx.playVictory();
-          changeScreen('screen-end');
+          checkRedemptionBeforeEnd();
           return;
         }
 
@@ -3018,18 +3352,526 @@
       }
     }
 
+    let isRollingCard = false;
+
     function showMilestoneModal(points) {
       const modal = document.getElementById('modal-milestone');
+      const prepView = document.getElementById('milestone-prep-view');
+      const rollView = document.getElementById('milestone-roll-view');
+      const prepText = document.getElementById('milestone-prep-text');
+      
+      if (!modal || !prepView || !rollView || !prepText) return;
+      
+      gameState.lastMilestonePoints = points;
+      
+      // Reset views
+      prepView.classList.remove('hidden');
+      rollView.classList.add('hidden');
+      
+      prepText.innerHTML = `คะแนนสะสมรวมของกลุ่มคุณถึง <strong class="text-purple-400 font-bold font-orbitron">${points}</strong> คะแนนแล้ว!<br><br>ผู้คุมเกมขอมอบสิทธิ์ในการสุ่มการ์ดพิเศษ 1 ใบเพื่อช่วยในการไขปริศนาหรือสะสมเพื่อบวกคะแนนพิเศษ!`;
+      
+      modal.classList.remove('hidden');
+    }
+
+    function startMilestoneLuckyDraw() {
+      const prepView = document.getElementById('milestone-prep-view');
+      const rollView = document.getElementById('milestone-roll-view');
       const text = document.getElementById('milestone-text');
-      if (modal && text) {
-        text.innerHTML = `ยินดีด้วย! คะแนนสะสมรวมของคุณถึง <strong class="text-purple-400 text-sm font-bold font-orbitron">${points}</strong> คะแนนแล้ว!<br><br>โปรดไปรับการ์ดกระดาษพิเศษใบถัดไปจากผู้คุมห้องเรียน เพื่อนำรหัสมากรอกเปิดพลังตัวช่วยในด่านถัดไปได้เลย!`;
-        modal.classList.remove('hidden');
+      const track = document.getElementById('card-roll-track');
+      const wrapper = document.getElementById('card-roll-wrapper');
+      const winnerDisplay = document.getElementById('winner-card-display');
+      const winnerImg = document.getElementById('winner-card-image');
+      const winnerName = document.getElementById('winner-card-name');
+      const winnerDetail = document.getElementById('winner-card-detail');
+      const choiceButtons = document.getElementById('milestone-choice-buttons');
+      const btnClose = document.getElementById('btn-close-milestone');
+      
+      if (!prepView || !rollView || !text || !track || !wrapper || !winnerDisplay || !winnerImg || !winnerName || !winnerDetail || !choiceButtons || !btnClose) return;
+      
+      prepView.classList.add('hidden');
+      rollView.classList.remove('hidden');
+      choiceButtons.classList.add('hidden');
+      btnClose.classList.add('hidden');
+      
+      isRollingCard = true;
+      text.innerHTML = `กำลังหมุนหาการ์ดพิเศษนำโชค...`;
+      
+      // Reset displays
+      wrapper.classList.remove('hidden');
+      winnerDisplay.classList.add('hidden');
+      
+      // Populate track with 32 cards (8 rounds of 4 cards)
+      track.innerHTML = '';
+      const totalCards = 32;
+      for (let i = 0; i < totalCards; i++) {
+        const cardId = (i % 4) + 1;
+        const img = document.createElement('img');
+        img.src = `Special_card_${cardId}.png`;
+        img.className = 'w-[80px] h-[120px] object-cover rounded-lg flex-shrink-0 border border-slate-800 shadow-sm';
+        track.appendChild(img);
       }
+
+      // Reset track position (no transition)
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(80px)';
+      
+      // Trigger reflow
+      track.offsetHeight;
+
+      // Select target card (1 to 4)
+      const targetCardId = Math.floor(Math.random() * 4) + 1;
+      gameState.lastWonCardId = targetCardId;
+      
+      const cardNames = [
+        'การ์ดเร่งมิติ (TIME BOOST)',
+        'การ์ดคูณพลังงาน (DOUBLE SCORE)',
+        'การ์ดวาร์ปเวลา (SKIP QUESTION)',
+        'การ์ดเนตรนิมิต (ELIMINATE OPTION)'
+      ];
+      const cardDetails = [
+        'เพิ่มเวลาในการคิดวิเคราะห์โจทย์ข้อถัดไปอีก 30 วินาทีเต็ม ช่วยให้มีเวลาทบทวนเงื่อนไขได้ละเอียดรอบคอบขึ้น!',
+        'รับคะแนนสะสมคูณสอง (+200%) ในโจทย์ข้อถัดไปทันทีหากตอบถูกต้อง! ใช้เพื่อทำคะแนนทิ้งห่างคู่แข่ง!',
+        'ข้ามข้อคำถามข้อถัดไปทันทีโดยระบบจะถือว่ากู้คืนเฟืองมิติสำเร็จ และมอบแต้มเฟืองมิติให้ฟรีๆ 1 ชิ้น!',
+        'ลบตัวเลือกตอบที่ผิดออกให้อัตโนมัติ 1-2 ตัวเลือก ช่วยให้มองเห็นคำตอบที่ถูกต้องได้ง่ายขึ้นแบบทวีคูณ!'
+      ];
+
+      // Spin 6 full rounds, stopping on index 24 + (targetCardId - 1)
+      const targetIndex = 24 + (targetCardId - 1);
+      const translateX = 80 - (targetIndex * 96);
+
+      // Start tick sound effect that slows down dramatically over 5.0 seconds
+      let currentTick = 0;
+      const totalTicks = 28;
+      const playTick = () => {
+        if (currentTick < totalTicks && isRollingCard) {
+          sfx.playClick();
+          currentTick++;
+          const delay = 60 + Math.pow(currentTick / totalTicks, 3.2) * 650;
+          setTimeout(playTick, delay);
+        }
+      };
+      playTick();
+
+      // Start transition (5.0s slow spin)
+      setTimeout(() => {
+        track.style.transition = 'transform 5.0s cubic-bezier(0.05, 0.85, 0.1, 1)';
+        track.style.transform = `translateX(${translateX}px)`;
+      }, 50);
+
+      // Animation complete (after 5 seconds)
+      setTimeout(() => {
+        if (!isRollingCard) return;
+        isRollingCard = false;
+        
+        // Play success sound
+        sfx.playStageClear();
+
+        // Highlight selected card in the track
+        const children = track.children;
+        if (children[targetIndex]) {
+          children[targetIndex].classList.add('border-purple-500', 'shadow-[0_0_15px_rgba(168,85,247,0.6)]', 'scale-105', 'transition-all');
+        }
+
+        // Smoothly transition from track to big card winner display
+        wrapper.classList.add('hidden');
+        
+        // Apply dynamic glow matching the card's theme
+        const imgContainer = document.getElementById('winner-card-img-container');
+        if (imgContainer) {
+          // Reset classes to base and add the specific glow class
+          imgContainer.className = 'w-[120px] h-[180px] rounded-2xl overflow-hidden border-2';
+          imgContainer.classList.add(`glow-card-${targetCardId}`);
+          
+          // Trigger custom card spin-slam animation
+          imgContainer.classList.remove('animate-card-spin-slam');
+          imgContainer.offsetHeight; // Force reflow
+          imgContainer.classList.add('animate-card-spin-slam');
+        }
+        
+        winnerImg.src = `Special_card_${targetCardId}.png`;
+        winnerName.textContent = cardNames[targetCardId - 1];
+        winnerDetail.textContent = cardDetails[targetCardId - 1];
+        winnerDisplay.classList.remove('hidden');
+
+        // --- EPIC REVEAL EFFECTS ---
+        // 1. Trigger Screen Shake on the modal's inner box
+        const modal = document.getElementById('modal-milestone');
+        const modalBox = modal.querySelector('.relative');
+        if (modalBox) {
+          modalBox.classList.remove('epic-shake');
+          modalBox.offsetHeight; // Force reflow
+          modalBox.classList.add('epic-shake');
+        }
+
+        // 2. Trigger Fullscreen Flash with matching card color gradient
+        const flashColors = ['#3b82f6', '#f59e0b', '#a855f7', '#10b981'];
+        const flash = document.createElement('div');
+        flash.className = 'epic-flash';
+        flash.style.background = `radial-gradient(circle, rgba(255,255,255,1) 10%, ${flashColors[targetCardId - 1]} 100%)`;
+        document.body.appendChild(flash);
+        setTimeout(() => flash.remove(), 800);
+
+        // 3. Trigger 35 Shooting Particles behind the card
+        const particleColors = [
+          'rgba(59, 130, 246, 0.85)',
+          'rgba(245, 158, 11, 0.85)',
+          'rgba(168, 85, 247, 0.85)',
+          'rgba(16, 185, 129, 0.85)'
+        ];
+        const activeColor = particleColors[targetCardId - 1];
+        for (let i = 0; i < 35; i++) {
+          const p = document.createElement('div');
+          p.className = 'epic-particle';
+          p.style.background = activeColor;
+          p.style.boxShadow = `0 0 10px ${activeColor}, 0 0 20px ${activeColor}`;
+          
+          // Circular angle and random explosion distance
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 50 + Math.random() * 120;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance;
+          
+          p.style.setProperty('--tx', `${tx}px`);
+          p.style.setProperty('--ty', `${ty}px`);
+          
+          // Random particle sizes
+          const size = 5 + Math.random() * 8;
+          p.style.width = `${size}px`;
+          p.style.height = `${size}px`;
+          
+          // Position particle center behind the card
+          p.style.left = '50%';
+          p.style.top = '90px'; // Approx center of the 180px height card
+          p.style.transform = 'translate(-50%, -50%)';
+          
+          winnerDisplay.appendChild(p);
+          
+          // Clean up particle
+          setTimeout(() => p.remove(), 1000);
+        }
+        // ----------------------------
+
+        text.innerHTML = `คุณสุ่มได้การ์ด: <strong class="text-purple-300 font-bold font-orbitron">${cardNames[targetCardId - 1]}</strong><br>โปรดระบุการใช้งานการ์ดใบนี้เพื่อดำเนินการต่อ:`;
+        
+        // Show choice buttons
+        choiceButtons.classList.remove('hidden');
+      }, 5100);
+    }
+
+    function chooseCardAction(action) {
+      sfx.playClick();
+      
+      const cardId = gameState.lastWonCardId;
+      const milestone = gameState.lastMilestonePoints;
+      
+      if (!cardId || !milestone) return;
+      
+      // Determine status
+      const status = (action === 'save') ? 'saved' : 'to_use';
+      
+      // Add card to player's wonCards safely
+      if (!gameState.wonCards) {
+        gameState.wonCards = [];
+      }
+      
+      gameState.wonCards.push({
+        id: cardId,
+        milestone: milestone,
+        status: status
+      });
+      
+      const cardNames = [
+        'การ์ดเร่งมิติ',
+        'การ์ดคูณพลังงาน',
+        'การ์ดวาร์ปเวลา',
+        'การ์ดเนตรนิมิต'
+      ];
+      
+      if (action === 'save') {
+        Swal.fire({
+          icon: 'success',
+          title: 'เก็บสะสมการ์ดสำเร็จ',
+          text: `ระบบเก็บ '${cardNames[cardId - 1]}' เข้ากระเป๋าเดินทางแล้ว จะถูกนำมาแปลงเป็นคะแนนโบนัสตอนจบเกมครับ!`,
+          background: '#0f172a',
+          color: '#f8fafc',
+          confirmButtonColor: '#8b5cf6'
+        });
+        closeMilestoneModal();
+      } else {
+        closeMilestoneModal();
+        openCardModal();
+      }
+      
+      // Save game state
+      localStorage.setItem('time_travelers_active_session', JSON.stringify(gameState));
     }
 
     function closeMilestoneModal() {
+      isRollingCard = false;
       const modal = document.getElementById('modal-milestone');
       if (modal) modal.classList.add('hidden');
+    }
+
+    function openTravelBagModal() {
+      sfx.playClick();
+      const modal = document.getElementById('modal-travel-bag');
+      const content = document.getElementById('travel-bag-content');
+      
+      if (!modal || !content) return;
+      
+      content.innerHTML = '';
+      
+      if (!gameState.wonCards || gameState.wonCards.length === 0) {
+        content.innerHTML = `
+          <div class="text-center py-8 text-slate-500">
+            <i class="fa-solid fa-suitcase-rolling text-4xl mb-2.5 block opacity-40"></i>
+            <p class="text-xs font-bold">กระเป๋าเดินทางว่างเปล่า</p>
+            <p class="text-[10px] text-slate-500 mt-1">สะสมคะแนนในเกมให้ถึงเกณฑ์ (20 / 40 / 60 คะแนน) เพื่อปลดล็อกและสุ่มการ์ดพิเศษจากผู้คุมเกม!</p>
+          </div>
+        `;
+      } else {
+        const cardNames = [
+          'การ์ดเร่งมิติ (TIME BOOST)',
+          'การ์ดคูณพลังงาน (DOUBLE SCORE)',
+          'การ์ดวาร์ปเวลา (SKIP QUESTION)',
+          'การ์ดเนตรนิมิต (ELIMINATE OPTION)'
+        ];
+        
+        const statusMap = {
+          'saved': { text: '🟢 สะสมแลกคะแนนท้ายเกม', class: 'bg-emerald-950/60 text-emerald-400 border border-emerald-500/20' },
+          'to_use': { text: '🟡 รอใช้งานในเกม', class: 'bg-amber-950/60 text-amber-400 border border-amber-500/20' },
+          'used': { text: '⚫ ใช้งานแล้ว', class: 'bg-slate-950/60 text-slate-500 border border-slate-800' },
+          'redeemed': { text: '✅ แปลงเป็นคะแนนแล้ว', class: 'bg-blue-950/60 text-blue-400 border border-blue-500/20' }
+        };
+        
+        gameState.wonCards.forEach((card) => {
+          const status = statusMap[card.status] || { text: card.status, class: '' };
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'flex items-center space-x-3 bg-slate-950/50 p-3 rounded-2xl border border-slate-800/80 text-left';
+          itemDiv.innerHTML = `
+            <img src="Special_card_${card.id}.png" class="w-[48px] h-[72px] object-cover rounded-lg border border-slate-800 flex-shrink-0" alt="Card">
+            <div class="flex-grow space-y-1">
+              <h4 class="text-xs font-bold text-slate-200 font-orbitron">${cardNames[card.id - 1]}</h4>
+              <p class="text-[10px] text-slate-500">ได้รับที่เกณฑ์: ${card.milestone} คะแนน</p>
+              <span class="inline-block text-[9px] font-semibold px-2 py-0.5 rounded-full ${status.class}">
+                ${status.text}
+              </span>
+            </div>
+          `;
+          content.appendChild(itemDiv);
+        });
+      }
+      
+      modal.classList.remove('hidden');
+    }
+
+    function closeTravelBagModal() {
+      const modal = document.getElementById('modal-travel-bag');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function checkRedemptionBeforeEnd() {
+      // Check if there are any cards with status 'saved'
+      const hasSavedCards = gameState.wonCards && gameState.wonCards.some(c => c.status === 'saved');
+      if (hasSavedCards) {
+        showRedeemScreen();
+      } else {
+        changeScreen('screen-end');
+      }
+    }
+
+    function showRedeemScreen() {
+      changeScreen('screen-redeem');
+      renderRedeemCards();
+    }
+
+    function renderRedeemCards() {
+      const listContainer = document.getElementById('redeem-cards-list');
+      if (!listContainer) return;
+      
+      listContainer.innerHTML = '';
+      
+      const savedCards = gameState.wonCards.filter(c => c.status === 'saved');
+      
+      if (savedCards.length === 0) {
+        listContainer.innerHTML = `
+          <div class="text-center py-8 text-slate-500 space-y-3">
+            <div class="w-12 h-12 bg-emerald-950/40 border border-emerald-500/20 rounded-full flex items-center justify-center text-emerald-400 mx-auto">
+              <i class="fa-solid fa-circle-check text-xl"></i>
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs font-bold text-slate-200">แปลงรหัสการ์ดสะสมทั้งหมดเรียบร้อยแล้ว!</p>
+              <p class="text-[10px] text-slate-400">กลุ่มของคุณสามารถกดปุ่มด้านล่างเพื่อเข้าสู่หน้าสรุปผลการเดินทางข้ามเวลาได้เลยครับ</p>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
+      const cardNames = [
+        'การ์ดเร่งมิติ (TIME BOOST)',
+        'การ์ดคูณพลังงาน (DOUBLE SCORE)',
+        'การ์ดวาร์ปเวลา (SKIP QUESTION)',
+        'การ์ดเนตรนิมิต (ELIMINATE OPTION)'
+      ];
+      
+      const bonusPoints = [50, 100, 150, 200]; // Points based on card ID
+      
+      gameState.wonCards.forEach((card, globalIdx) => {
+        if (card.status !== 'saved') return;
+        
+        const cardPoints = bonusPoints[card.id - 1];
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'flex items-center space-x-3 bg-slate-950/60 p-3 rounded-2xl border border-slate-800 text-left';
+        cardDiv.innerHTML = `
+          <img src="Special_card_${card.id}.png" class="w-[54px] h-[81px] object-cover rounded-lg border border-slate-800 flex-shrink-0" alt="Card">
+          <div class="flex-grow space-y-2">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="text-xs font-bold text-slate-200 font-orbitron">${cardNames[card.id - 1]}</h4>
+                <p class="text-[9px] text-slate-500">ได้รับที่เกณฑ์: ${card.milestone} คะแนน</p>
+              </div>
+              <span class="text-[11px] text-emerald-400 font-bold font-mono">+${cardPoints} PTS</span>
+            </div>
+            
+            <div class="flex space-x-2">
+              <input type="text" id="redeem-code-input-${globalIdx}" placeholder="กรอกรหัสการ์ด 6 หลัก" maxlength="6" 
+                class="flex-grow px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs font-mono text-center text-white focus:border-purple-500 focus:outline-none">
+              <button onclick="submitRedeemCard(${globalIdx})" class="px-4 py-1.5 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition-all active:scale-95">
+                แปลงคะแนน
+              </button>
+            </div>
+          </div>
+        `;
+        listContainer.appendChild(cardDiv);
+      });
+    }
+
+    function submitRedeemCard(globalIdx) {
+      sfx.playClick();
+      const card = gameState.wonCards[globalIdx];
+      if (!card) return;
+      
+      const inputEl = document.getElementById(`redeem-code-input-${globalIdx}`);
+      if (!inputEl) return;
+      
+      const code = inputEl.value.trim();
+      
+      if (code.length !== 6) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'กรอกรหัสไม่ครบ',
+          text: 'โปรดกรอกรหัสตัวเลข 6 หลักของการ์ดกระดาษให้ครบถ้วนครับ',
+          background: '#0f172a',
+          color: '#f8fafc',
+          confirmButtonColor: '#e11d48'
+        });
+        return;
+      }
+      
+      // Check if already used or redeemed
+      if (usedCards.includes(code)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'รหัสนี้ถูกใช้งานแล้ว',
+          text: 'รหัสการ์ด 6 หลักนี้เคยถูกใช้งานไปแล้ว ไม่สามารถนำมาแปลงซ้ำได้ครับ',
+          background: '#0f172a',
+          color: '#f8fafc',
+          confirmButtonColor: '#e11d48'
+        });
+        return;
+      }
+      
+      // Verify code in DB
+      const dbCard = specialCardsDB[code];
+      if (!dbCard) {
+        Swal.fire({
+          icon: 'error',
+          title: 'รหัสไม่ถูกต้อง',
+          text: 'ไม่พบรหัสการ์ดนี้ในฐานข้อมูลระบบโปรเจกต์ โปรดตรวจสอบตัวเลขและกรอกใหม่อีกครั้งครับ',
+          background: '#0f172a',
+          color: '#f8fafc',
+          confirmButtonColor: '#e11d48'
+        });
+        return;
+      }
+      
+      // Verify that the code type matches the won card type
+      const typeMap = {
+        1: 'timeBoost',
+        2: 'doubleScore',
+        3: 'skipQuestion',
+        4: 'oracleVision'
+      };
+      
+      if (dbCard.type !== typeMap[card.id]) {
+        Swal.fire({
+          icon: 'error',
+          title: 'การ์ดไม่ตรงรุ่น',
+          text: 'รหัสที่กรอกเป็นของการ์ดชนิดอื่น ไม่ตรงกับชนิดของการ์ดสะสมใบนี้ โปรดตรวจสอบรหัสบนการ์ดกระดาษใบที่ถูกต้องครับ',
+          background: '#0f172a',
+          color: '#f8fafc',
+          confirmButtonColor: '#e11d48'
+        });
+        return;
+      }
+      
+      // Valid! Mark as redeemed and award points
+      card.status = 'redeemed';
+      const bonusPoints = [50, 100, 150, 200];
+      const pointsToAdd = bonusPoints[card.id - 1];
+      
+      gameState.totalPoints += pointsToAdd;
+      usedCards.push(code);
+      gameState.usedCardsInSession.push(code);
+      
+      // Play success sound
+      sfx.playStageClear();
+      
+      // Save game state
+      localStorage.setItem('time_travelers_active_session', JSON.stringify(gameState));
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'แปลงพลังงานสำเร็จ!',
+        html: `แปลงคะแนนโบนัสเสร็จสิ้น!<br>ได้รับคะแนนพลังงานเพิ่ม <strong>+${pointsToAdd}</strong> คะแนนสะสม!`,
+        background: '#0f172a',
+        color: '#f8fafc',
+        confirmButtonColor: '#10b981'
+      });
+      
+      // Re-render
+      renderRedeemCards();
+      
+      // Update score display in top bar
+      updateGlobalStatus();
+    }
+
+    function goToFinalSummary() {
+      sfx.playClick();
+      // Check if there are still unredeemed cards
+      const unredeemedCount = gameState.wonCards.filter(c => c.status === 'saved').length;
+      
+      if (unredeemedCount > 0) {
+        Swal.fire({
+          title: 'ยังมีการ์ดที่ไม่ได้แปลงคะแนน',
+          text: `คุณยังมีการ์ดสะสมเหลืออยู่ ${unredeemedCount} ใบ ที่ยังไม่ได้แปลงเป็นคะแนนโบนัส หากคุณกดยืนยัน จะไม่สามารถกลับมาแปลงคะแนนได้อีกและคะแนนส่วนนี้จะหายไป ต้องการดำเนินต่อหรือไม่?`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#8b5cf6',
+          cancelButtonColor: '#475569',
+          confirmButtonText: 'ใช่, ไปหน้าสรุปอันดับเลย',
+          cancelButtonText: 'ยกเลิก (กลับไปกรอกรหัส)',
+          background: '#0f172a',
+          color: '#f8fafc'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            changeScreen('screen-end');
+          }
+        });
+      } else {
+        changeScreen('screen-end');
+      }
     }
 
     function showCardFeedback(isSuccess, title, desc, emoji, themeColorClass, borderClass, bgIconClass, cardImage) {
