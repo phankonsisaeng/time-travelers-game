@@ -168,17 +168,29 @@
   <!-- Background Overlay -->
   <div id="bg-overlay" class="absolute inset-0 bg-slate-950/20 z-0 pointer-events-none transition-all duration-500"></div>
 
-  <!-- Floating BGM Controller (Bottom-Right Corner) -->
-  <div id="bgm-controller-container" class="fixed bottom-4 right-4 sm:right-6 sm:bottom-20 z-40 flex items-center bg-slate-950/95 border border-slate-800 rounded-2xl shadow-2xl p-1 transition-all duration-300">
-    <!-- Volume Slider Container (Starts collapsed with w-0) -->
-    <div id="bgm-slider-container" class="w-0 overflow-hidden transition-all duration-300 flex items-center">
-      <span id="bgm-volume-percent" class="text-[10px] font-mono font-bold text-blue-400 ml-2 min-w-[24px] text-right">10%</span>
-      <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.10" oninput="changeBgmVolume(this.value)" class="w-20 mx-2 cursor-pointer" title="ระดับเสียงเพลงประกอบ">
+  <!-- Floating Audio Controller (Bottom-Right Corner) -->
+  <div id="audio-controller-container" class="fixed bottom-4 right-4 sm:right-6 sm:bottom-20 z-40 flex items-center space-x-2 bg-slate-950/95 border border-slate-800 rounded-2xl shadow-2xl p-1.5 transition-all duration-300 text-xs font-semibold">
+    <!-- Sound Effects (SFX) Control -->
+    <div class="flex items-center border-r border-slate-800/80 pr-2">
+      <button onclick="toggleSound(event)" id="btn-sound-toggle" class="px-2 py-1 bg-slate-900/60 hover:bg-slate-900 border border-slate-800/50 rounded-xl text-slate-300 hover:text-white transition-all flex items-center space-x-1" title="เปิด/ปิดเสียงเอฟเฟกต์ (SFX)">
+        <i id="sfx-icon" class="fa-solid fa-volume-high text-[10px]"></i>
+        <span class="text-[10px] font-bold">เสียงเอฟเฟกต์</span>
+      </button>
     </div>
-    <!-- Speaker Button -->
-    <button onclick="toggleBgmVolumeSlider(event)" id="btn-bgm-toggle" class="w-8 h-8 rounded-xl flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-900 transition-all" title="ปรับเสียงเพลงประกอบ">
-      <i class="fa-solid fa-volume-high text-xs"></i>
-    </button>
+
+    <!-- Background Music (BGM) Control -->
+    <div id="bgm-controller-sub" class="flex items-center">
+      <!-- Volume Slider Container (Starts collapsed with w-0) -->
+      <div id="bgm-slider-container" class="w-0 overflow-hidden transition-all duration-300 flex items-center">
+        <span id="bgm-volume-percent" class="text-[10px] font-mono font-bold text-blue-400 min-w-[24px] text-right">10%</span>
+        <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.10" oninput="changeBgmVolume(this.value)" class="w-20 mx-2 cursor-pointer" title="ระดับเสียงเพลงประกอบ">
+      </div>
+      <!-- Speaker Button -->
+      <button onclick="toggleBgmVolumeSlider(event)" id="btn-bgm-toggle" class="px-2 py-1 bg-slate-900/60 hover:bg-slate-900 border border-slate-800/50 rounded-xl text-slate-300 hover:text-white transition-all flex items-center space-x-1" title="ปรับเสียงเพลงประกอบ (BGM)">
+        <i class="fa-solid fa-music text-[10px]"></i>
+        <span class="text-[10px] font-bold">เพลงประกอบ</span>
+      </button>
+    </div>
   </div>
 
   <!-- Header -->
@@ -212,7 +224,7 @@
         <i class="fa-solid fa-star text-amber-400"></i>
         <span id="display-score">0</span>/15
         <span class="text-slate-700">|</span>
-        <i class="fa-solid fa-coins text-yellow-400"></i>
+        <i class="fa-solid fa-gear text-amber-400 animate-spin" style="animation-duration: 8s;"></i>
         <span id="display-points">0</span>
       </div>
     </div>
@@ -421,14 +433,17 @@
         <!-- Slide Bottom Actions -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-slate-800">
           
-          <!-- Bottom Left: Hint & Sound Controls -->
+          <!-- Bottom Left: Hint & Zoom Controls -->
           <div class="flex items-center space-x-2">
             <button onclick="showHint()" class="px-3.5 py-2 bg-slate-950/60 hover:bg-slate-900/80 border border-slate-800 rounded-xl text-xs font-semibold text-slate-300 flex items-center space-x-1.5 transition-all">
               <i class="fa-regular fa-lightbulb text-amber-400"></i>
               <span>ขอคำใบ้ (Hint)</span>
             </button>
-            <button onclick="toggleSound()" id="btn-sound-toggle" class="p-2 bg-slate-950/60 hover:bg-slate-900/80 border border-slate-800 rounded-xl text-slate-300 transition-all" title="เปิด/ปิดเสียง">
-              <i class="fa-solid fa-volume-high text-xs"></i>
+            <button onclick="adjustTextSize(1)" class="p-2 bg-slate-950/60 hover:bg-slate-900/80 border border-slate-800 rounded-xl text-slate-300 transition-all" title="ขยายตัวอักษร">
+              <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+            </button>
+            <button onclick="adjustTextSize(-1)" class="p-2 bg-slate-950/60 hover:bg-slate-900/80 border border-slate-800 rounded-xl text-slate-300 transition-all" title="ลดขนาดตัวอักษร">
+              <i class="fa-solid fa-magnifying-glass-minus text-xs"></i>
             </button>
           </div>
 
@@ -436,17 +451,6 @@
           <button id="btn-submit" onclick="checkAnswer()" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-neon-blue transition-all flex items-center justify-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
             <span>ส่งคำตอบ (Submit)</span>
             <i class="fa-solid fa-paper-plane text-xs"></i>
-          </button>
-        </div>
-
-        <!-- Floating Zoom/Accessibility Controls (Shifted to Left of BGM) -->
-        <div class="absolute bottom-4 right-16 sm:right-20 sm:bottom-20 flex flex-col bg-slate-950/85 border border-slate-800 rounded-full shadow-2xl p-1 space-y-1 z-30">
-          <button onclick="adjustTextSize(1)" class="w-8 h-8 flex items-center justify-center rounded-full text-slate-300 hover:bg-slate-900 transition-colors" title="ขยายตัวอักษร">
-            <i class="fa-solid fa-plus text-xs"></i>
-          </button>
-          <hr class="border-slate-800">
-          <button onclick="adjustTextSize(-1)" class="w-8 h-8 flex items-center justify-center rounded-full text-slate-300 hover:bg-slate-900 transition-colors" title="ลดขนาดตัวอักษร">
-            <i class="fa-solid fa-minus text-xs"></i>
           </button>
         </div>
 
@@ -737,6 +741,16 @@
         stage5: 'bgm_stage5.mp3'   // ด่าน 5: อวกาศ (Space Ambient)
       },
       
+      // ตั้งค่าช่วงเวลาเริ่มต้นที่จะข้าม (หน่วยเป็นวินาที) เพื่อเลี่ยงช่วงเงียบต้นเพลง
+      startOffsets: {
+        main: 0,
+        stage1: 7.0,  // ข้ามช่วงเงียบต้นเพลงด่าน 1 ไปเป็นเวลา 4 วินาที (คุณครูสามารถปรับเพิ่ม/ลดตัวเลขนี้ได้ตามต้องการ)
+        stage2: 0,
+        stage3: 0,
+        stage4: 0,
+        stage5: 0
+      },
+      
       play(trackKey) {
         if (this.currentTrack === trackKey && this.audio && !this.audio.paused) {
           return;
@@ -751,6 +765,15 @@
           this.audio.loop = true;
           this.audio.volume = this.isMuted ? 0 : this.volume;
           this.currentTrack = trackKey;
+          
+          // ข้ามช่วงเงียบต้นเพลงตามที่กำหนดใน startOffsets
+          const offset = this.startOffsets[trackKey] || 0;
+          if (offset > 0) {
+            this.audio.addEventListener('loadedmetadata', () => {
+              if (this.audio) this.audio.currentTime = offset;
+            });
+            this.audio.currentTime = offset; // ตั้งค่าทันที
+          }
           
           const playPromise = this.audio.play();
           if (playPromise !== undefined) {
@@ -830,7 +853,7 @@
 
     // Auto-hide volume slider when clicking outside
     document.addEventListener('click', (e) => {
-      const container = document.getElementById('bgm-controller-container');
+      const container = document.getElementById('audio-controller-container');
       const sliderContainer = document.getElementById('bgm-slider-container');
       if (container && sliderContainer && !container.contains(e.target)) {
         sliderContainer.classList.remove('w-24');
@@ -1030,16 +1053,18 @@
 
     const sfx = new SoundEffects();
 
-    function toggleSound() {
+    function toggleSound(e) {
+      if (e) e.stopPropagation();
       sfx.muted = !sfx.muted;
-      const btn = document.getElementById('btn-sound-toggle');
-      if (sfx.muted) {
-        btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-xs text-rose-500"></i>';
-        showToast('ปิดเสียงเอฟเฟกต์แล้ว');
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-volume-high text-xs text-blue-400"></i>';
-        showToast('เปิดเสียงเอฟเฟกต์แล้ว');
-        sfx.playClick();
+      const icon = document.getElementById('sfx-icon');
+      if (icon) {
+        if (sfx.muted) {
+          icon.className = 'fa-solid fa-volume-xmark text-[10px] text-rose-400';
+          showToast('🔇 ปิดเสียงเอฟเฟกต์แล้ว');
+        } else {
+          icon.className = 'fa-solid fa-volume-high text-[10px]';
+          showToast('🔊 เปิดเสียงเอฟเฟกต์แล้ว');
+        }
       }
     }
 
@@ -2983,7 +3008,7 @@
     }
 
     function checkMilestones() {
-      const milestones = [40, 80, 120];
+      const milestones = [20, 40, 60];
       for (let m of milestones) {
         if (gameState.totalPoints >= m && !gameState.triggeredMilestones.includes(m)) {
           gameState.triggeredMilestones.push(m);
